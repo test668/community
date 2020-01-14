@@ -12,6 +12,8 @@
 
 [Spring boot文档](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
 
+[Thymeleaf 文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#introducing-thymeleaf)
+
 ##工具
 
 [git工具](https://git-scm.com/)
