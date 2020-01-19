@@ -2,7 +2,6 @@ package community.community.controller;
 
 import community.community.dto.Access_tokenDto;
 import community.community.dto.GithubUser;
-import community.community.mapper.UserMapper;
 import community.community.model.User;
 import community.community.provider.GithubProvider;
 import community.community.service.UserService;
@@ -31,8 +30,6 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String RedirectUri;
 
-    @Autowired
-    private UserMapper UserMapper;
 
     @Autowired
     private UserService userService;

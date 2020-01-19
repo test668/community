@@ -1,7 +1,6 @@
 package community.community.controller;
 
 import community.community.dto.PaginationDto;
-import community.community.mapper.UserMapper;
 import community.community.model.User;
 import community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProfileController {
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private QuestionService questionService;

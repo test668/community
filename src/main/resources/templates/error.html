@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <title>my first community</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/community.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="../static/css/community.css">
+</head>
+<body>
+<div th:insert="~{common :: copy}"></div>
+
+        <div class="jumbotron">
+            <h1>服务器出错！！</h1>
+            <p th:text="${message}">kkk</p>
+            <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
+        </div>
+
+
+</body>
+</html>
