@@ -13,7 +13,7 @@ public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
     ModelAndView handle(HttpServletRequest request, Model model) {
         HttpStatus status = getStatus(request);
-        model.addAttribute("message","by");
+        model.addAttribute("message","服务器繁忙，请稍后试试");
         return new ModelAndView("error");
     }
 
