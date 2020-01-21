@@ -13,4 +13,10 @@ public class ResultDto {
         resultDto.setMessage(message);
         return resultDto;
     }
+    public static ResultDto ok0f(){
+        ResultDto resultDto = new ResultDto();
+        resultDto.setCode(200);
+        resultDto.setMessage("ok");
+        return resultDto;
+    }
 }

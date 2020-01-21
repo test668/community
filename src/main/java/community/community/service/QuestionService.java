@@ -2,6 +2,7 @@ package community.community.service;
 
 import community.community.dto.PaginationDto;
 import community.community.dto.QuestionDto;
+import community.community.exception.CustomizeException;
 import community.community.mapper.QuestionMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.Question;
@@ -99,6 +100,9 @@ public class QuestionService {
 
     public QuestionDto getById(Integer id) {
         Question question= questionMapper.getById(id);
+        if (question==null){
+            throw new CustomizeException("问题不存在");
+        }
         QuestionDto questionDto=new QuestionDto();
         BeanUtils.copyProperties(question,questionDto);
         User user=userMapper.findById(question.getCreator());

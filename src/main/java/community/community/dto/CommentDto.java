@@ -1,12 +1,17 @@
 package community.community.dto;
 
+import community.community.model.User;
 import lombok.Data;
-
-import java.math.BigInteger;
 
 @Data
 public class CommentDto {
+    private Integer id;
     private long parentId;
+    private Integer commentator;
+    private long gmtCreate;
+    private long gmtModifity;
+    private long likeCount;
     private String content;
     private Integer type;
+    private User user;
 }

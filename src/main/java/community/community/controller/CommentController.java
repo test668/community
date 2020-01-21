@@ -1,8 +1,7 @@
 package community.community.controller;
 
-import community.community.dto.CommentDto;
+import community.community.dto.CommentCreateDto;
 import community.community.dto.ResultDto;
-import community.community.mapper.CommentMapper;
 import community.community.model.Comment;
 import community.community.model.User;
 import community.community.service.CommentService;
@@ -14,20 +13,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class CommentController {
-    @Autowired
-    private CommentMapper commentMapper;
+
 
     @Autowired
     private CommentService commentService;
 
     @ResponseBody
     @RequestMapping(value = "/comment",method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDto commentDto,
+    public Object post(@RequestBody CommentCreateDto commentCreateDto,
                        HttpServletRequest request
                        ){
         User user = (User) request.getSession().getAttribute("user");
@@ -35,15 +31,13 @@ public class CommentController {
             return ResultDto.error0f(2002,"未登录");
         }
         Comment comment=new Comment();
-        comment.setParentId(commentDto.getParentId());
-        comment.setContent(commentDto.getContent());
-        comment.setType(commentDto.getType());
+        comment.setParentId(commentCreateDto.getParentId());
+        comment.setContent(commentCreateDto.getContent());
+        comment.setType(commentCreateDto.getType());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModifity(System.currentTimeMillis());
         comment.setCommentator(user.getId());
-        commentMapper.insert(comment);
-        Map<Object, Object> objectObjectHashMap = new HashMap<>();
-        objectObjectHashMap.put("message","成功");
-        return objectObjectHashMap;
+        commentService.insert(comment);
+        return ResultDto.ok0f();
     }
 }

@@ -6,7 +6,7 @@ import java.math.BigInteger;
 
 @Data
 public class Comment {
-    private BigInteger id;
+    private Integer id;
     private long parentId;
     private Integer commentator;
     private long gmtCreate;
