@@ -2,6 +2,7 @@ package community.community.controller;
 
 import community.community.dto.CommentCreateDto;
 import community.community.dto.ResultDto;
+import community.community.exception.CustomizeException;
 import community.community.model.Comment;
 import community.community.model.User;
 import community.community.service.CommentService;
@@ -29,6 +30,9 @@ public class CommentController {
         User user = (User) request.getSession().getAttribute("user");
         if (user==null){
             return ResultDto.error0f(2002,"未登录");
+        }
+        if (commentCreateDto==null||commentCreateDto.getContent().isEmpty()){
+            return ResultDto.error0f(2003,"评论不能为空");
         }
         Comment comment=new Comment();
         comment.setParentId(commentCreateDto.getParentId());

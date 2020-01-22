@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,15 +63,30 @@ public class CommentService {
 
     public List<CommentDto> listByQuestionId(Integer id) {
        List<Comment> comments=commentMapper.ListById(id,CommentTypeEnum.QUESTION.getType());
+
        if (comments.size()==0){
            return new ArrayList<>();
        }
+
+        Collections.sort(comments, new Comparator<Comment>() {
+            @Override
+            public int compare(Comment o1, Comment o2) {
+                return (int)(o2.getLikeCount()-o1.getLikeCount());
+            }
+        });
         Set<Integer> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
         List<Integer> userIds=new ArrayList();
         userIds.addAll(commentators);
 
+        //修改处
+        List<User> users=new ArrayList<>();
+        for (Integer userId : userIds) {
+            User user = userMapper.findById(userId);
+            users.add(user);
+        }
 
-        List<User> users=userMapper.findByCommentators(userIds);
+
+
         Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
 
 
