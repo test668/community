@@ -1,8 +1,8 @@
 package community.community.controller;
 
-import community.community.dto.CommentCreateDto;
 import community.community.dto.CommentDto;
 import community.community.dto.QuestionDto;
+import community.community.enums.CommentTypeEnum;
 import community.community.service.CommentService;
 import community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class QuestionController {
     ){
 
         QuestionDto questionDto=questionService.getById(id);
-        List<CommentDto> comments=commentService.listByQuestionId(id);
+        List<CommentDto> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         questionService.incView(id);
         model.addAttribute("question",questionDto);
         model.addAttribute("comments",comments);

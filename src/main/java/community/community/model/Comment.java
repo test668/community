@@ -2,7 +2,6 @@ package community.community.model;
 
 import lombok.Data;
 
-import java.math.BigInteger;
 
 @Data
 public class Comment {
@@ -14,4 +13,5 @@ public class Comment {
     private long likeCount;
     private String content;
     private Integer type;
+    private Integer commentCount;
 }

@@ -41,6 +41,11 @@ body{
 .comment-s{
     margin-top: 0px;
 }
+
+.sub-comments{
+    border-radius: 5px;
+    margin-top: 10px;
+}
 .menu{
     color:#999;
     margin-top: 5px;
@@ -49,6 +54,9 @@ body{
     margin-right: 6px;
     font-size: 15px;
     cursor: pointer;
+}
+.menu .active{
+    color: #499ef3;
 }
 .menu .icon:hover{
     color: #499ef3;

@@ -1,19 +1,18 @@
 package community.community.controller;
 
 import community.community.dto.CommentCreateDto;
+import community.community.dto.CommentDto;
 import community.community.dto.ResultDto;
-import community.community.exception.CustomizeException;
+import community.community.enums.CommentTypeEnum;
 import community.community.model.Comment;
 import community.community.model.User;
 import community.community.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -43,5 +42,12 @@ public class CommentController {
         comment.setCommentator(user.getId());
         commentService.insert(comment);
         return ResultDto.ok0f();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}",method = RequestMethod.GET)
+    public ResultDto<List> comments(@PathVariable(name = "id") Integer id){
+        List<CommentDto> commentDtos = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+        return ResultDto.ok0f(commentDtos);
     }
 }

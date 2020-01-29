@@ -44,7 +44,7 @@ public class CommentService {
          }
          else {
              commentMapper.insert(comment);
-
+             commentMapper.updateCommentCount((int)comment.getParentId());
          }
         }
         else{
@@ -61,8 +61,8 @@ public class CommentService {
     }
 
 
-    public List<CommentDto> listByQuestionId(Integer id) {
-       List<Comment> comments=commentMapper.ListById(id,CommentTypeEnum.QUESTION.getType());
+    public List<CommentDto> listByTargetId(Integer id, CommentTypeEnum type) {
+       List<Comment> comments=commentMapper.ListById(id, type.getType());
 
        if (comments.size()==0){
            return new ArrayList<>();
