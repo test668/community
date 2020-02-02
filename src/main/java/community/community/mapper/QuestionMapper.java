@@ -11,7 +11,7 @@ public interface QuestionMapper {
     @Insert("Insert into question (title,description,gmt_create,gmt_modifity,creator,tag) values (#{title},#{description},#{gmtCreate},#{gmtModifity},#{creator},#{tag})")
     void create(Question question);
 
-    @Select("Select * from question limit #{offset},#{size}")
+    @Select("Select * from question order by gmt_create desc limit #{offset},#{size} ")
     List<Question> List(@Param(value = "offset") Integer offset,@Param(value = "size") Integer size);
 
     @Select("Select count(1) from question")
@@ -34,4 +34,7 @@ public interface QuestionMapper {
 
     @Update("update question set comment_count=comment_count+1 where id=#{id}")
     void updateCommentCount(@Param(value = "id") Integer id);
+
+    @Select("select id,title,tag from question where tag regexp #{tag} and id !=#{id}")
+    List<Question> selectRelatedQuestion(Question question);
 }

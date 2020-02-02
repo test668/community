@@ -1,5 +1,6 @@
 package community.community.service;
 
+import com.mysql.cj.util.StringUtils;
 import community.community.dto.PaginationDto;
 import community.community.dto.QuestionDto;
 import community.community.exception.CustomizeException;
@@ -11,8 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -41,8 +43,9 @@ public class QuestionService {
             page=totalPage;
         }
         paginationDto.setPagination(totalPage,page);
-
         Integer offset=size*(page-1);
+
+        
 
         List<Question> questions = questionMapper.List(offset,size);
         List<QuestionDto> questionDtoList=new ArrayList<>();
@@ -124,5 +127,25 @@ public class QuestionService {
 
     public void incView(Integer id) {
         questionMapper.updateView(id);
+    }
+
+    public List<QuestionDto> selectQuestions(QuestionDto questionDto) {
+        if(StringUtils.isNullOrEmpty(questionDto.getTag())){
+            return new ArrayList<>();
+        }
+        String[] tags = questionDto.getTag().split(",");
+        String regexTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question=new Question();
+        question.setId(questionDto.getId());
+        question.setTag(regexTag);
+
+        List<Question> questions=questionMapper.selectRelatedQuestion(question);
+        List<QuestionDto> questionDtos = questions.stream().map(q -> {
+            QuestionDto questionDto1 = new QuestionDto();
+            BeanUtils.copyProperties(q,questionDto1);
+            return questionDto1;
+        }).collect(Collectors.toList());
+
+        return questionDtos;
     }
 }

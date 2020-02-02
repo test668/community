@@ -48,7 +48,7 @@ function collapseComments(e) {
         e.classList.remove("active");
     } else {
         var subCommentContainer = $("#comment-" + id);
-        if (subCommentContainer.children().length != 1) {
+        if (subCommentContainer.children().length !== 1) {
             comments.addClass("in");
             e.setAttribute("data-collapse", "in");
             e.classList.add("active");
@@ -91,6 +91,9 @@ function collapseComments(e) {
 
                     subCommentContainer.prepend(commentElement);
                 });
+                comments.addClass("in");
+                e.setAttribute("data-collapse", "in");
+                e.classList.add("active");
             });
         }
 
