@@ -27,8 +27,10 @@ public class QuestionService {
 
     public PaginationDto List(Integer page, Integer size) {
         PaginationDto paginationDto = new PaginationDto();
-
         Integer totalCount = questionMapper.count();
+        if (totalCount==0){
+            return new PaginationDto();
+        }else {
         Integer totalPage;
         if(totalCount % size==0){
             totalPage=totalCount /size;
@@ -62,11 +64,15 @@ public class QuestionService {
 
 
         return paginationDto;
+        }
     }
 
     public PaginationDto List(Integer userId, Integer page, Integer size) {
         PaginationDto paginationDto = new PaginationDto();
         Integer totalCount = questionMapper.countByUserId(userId);
+        if(totalCount==0){
+            return new PaginationDto();
+        }else {
         Integer totalPage;
         if(totalCount % size==0){
             totalPage=totalCount /size;
@@ -99,6 +105,7 @@ public class QuestionService {
 
 
         return paginationDto;
+        }
     }
 
     public QuestionDto getById(Integer id) {
@@ -148,4 +155,5 @@ public class QuestionService {
 
         return questionDtos;
     }
+
 }

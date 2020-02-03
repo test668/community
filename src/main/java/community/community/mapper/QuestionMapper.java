@@ -17,7 +17,7 @@ public interface QuestionMapper {
     @Select("Select count(1) from question")
     Integer count();
 
-    @Select("Select * from question where creator=#{userId} limit #{offset},#{size}")
+    @Select("Select * from question where creator=#{userId} order by gmt_create desc limit #{offset},#{size}")
     List<Question> ListByUserId(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset,@Param(value = "size") Integer size);
 
     @Select("Select count(1) from question where creator=#{userId}")
@@ -37,4 +37,5 @@ public interface QuestionMapper {
 
     @Select("select id,title,tag from question where tag regexp #{tag} and id !=#{id}")
     List<Question> selectRelatedQuestion(Question question);
+
 }

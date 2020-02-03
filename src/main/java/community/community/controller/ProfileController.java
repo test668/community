@@ -29,7 +29,6 @@ public class ProfileController {
         if (user==null){
             return "redirect:/";
         }
-
         if ("questions".equals(action)){
             model.addAttribute("section","questions");
             model.addAttribute("sectionName","我提问的问题");
@@ -38,8 +37,14 @@ public class ProfileController {
             model.addAttribute("sectionName","最新回复");
         }
         PaginationDto paginationDto = questionService.List(user.getId(), page, size);
+        if (paginationDto==null){
+            //以后再来补充。。。
+        }else{
         model.addAttribute("pagination",paginationDto);
+        }
         return "profile";
     }
+
+
 
 }

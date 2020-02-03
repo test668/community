@@ -20,7 +20,10 @@ public class IndexController {
                         @RequestParam(name = "size",defaultValue = "5") Integer size
                         ){
         PaginationDto pagination=questionService.List(page,size);
-        model.addAttribute("pagination",pagination);
+        if (pagination==null){
+            //以后修改
+        }else {
+        model.addAttribute("pagination",pagination);}
         return "index";}
 
 

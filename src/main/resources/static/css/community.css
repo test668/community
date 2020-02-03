@@ -68,10 +68,15 @@ body{
 }
 .question-tag{
     margin-right: 5px;
+
 }
 .question-related{
     line-height: 20px;
     font-size: 16px;
     margin-left: 0;
     padding-left: 0;
+}
+.publish-tag-tab{
+    display: none;
+    margin-top: 10px;
 }
