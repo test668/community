@@ -12,7 +12,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,7 +59,7 @@ public class QuestionService {
             questionDtoList.add(questionDto);
 
         }
-        paginationDto.setQuestions(questionDtoList);
+        paginationDto.setData(questionDtoList);
 
 
         return paginationDto;
@@ -101,7 +100,7 @@ public class QuestionService {
             questionDtoList.add(questionDto);
 
         }
-        paginationDto.setQuestions(questionDtoList);
+        paginationDto.setData(questionDtoList);
 
 
         return paginationDto;

@@ -1,7 +1,9 @@
 package community.community.controller;
 
 import community.community.dto.PaginationDto;
+import community.community.model.Notification;
 import community.community.model.User;
+import community.community.service.NotificationService;
 import community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProfileController {
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private QuestionService questionService;
@@ -32,15 +37,23 @@ public class ProfileController {
         if ("questions".equals(action)){
             model.addAttribute("section","questions");
             model.addAttribute("sectionName","我提问的问题");
+            PaginationDto paginationDto = questionService.List(user.getId(), page, size);
+            if (paginationDto==null){
+                //以后再来补充。。。
+            }else{
+                model.addAttribute("pagination",paginationDto);
+            }
         }else if ("replies".equals(action)){
+            PaginationDto paginationDto=notificationService.List(user.getId(), page, size);
+            int unreadCount=notificationService.unread(user.getId());
             model.addAttribute("section","replies");
+            if (paginationDto==null){
+                //以后再来补充。。。
+            }else{
+                model.addAttribute("pagination",paginationDto);
+            }
+            model.addAttribute("unreadCount",unreadCount);
             model.addAttribute("sectionName","最新回复");
-        }
-        PaginationDto paginationDto = questionService.List(user.getId(), page, size);
-        if (paginationDto==null){
-            //以后再来补充。。。
-        }else{
-        model.addAttribute("pagination",paginationDto);
         }
         return "profile";
     }

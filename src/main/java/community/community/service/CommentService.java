@@ -3,11 +3,15 @@ package community.community.service;
 
 import community.community.dto.CommentDto;
 import community.community.enums.CommentTypeEnum;
+import community.community.enums.NotificationStatusEnum;
+import community.community.enums.NotificationTypeEnum;
 import community.community.exception.CustomizeException;
 import community.community.mapper.CommentMapper;
+import community.community.mapper.NotificationMapper;
 import community.community.mapper.QuestionMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.Comment;
+import community.community.model.Notification;
 import community.community.model.Question;
 import community.community.model.User;
 import org.springframework.beans.BeanUtils;
@@ -29,8 +33,11 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User commentator) {
         if (comment.getParentId()==0){
             throw new CustomizeException("回复的问题不存在");
         }
@@ -43,8 +50,13 @@ public class CommentService {
              throw new CustomizeException("评论不存在");
          }
          else {
+             Question question = questionMapper.getById((int) dbComment.getParentId());
+             if (question==null){
+                 throw new CustomizeException("问题不存在22");
+             }
              commentMapper.insert(comment);
              commentMapper.updateCommentCount((int)comment.getParentId());
+             createNotifity(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, (long)question.getId());
          }
         }
         else{
@@ -55,9 +67,24 @@ public class CommentService {
             else{
                 commentMapper.insert(comment);
                 questionMapper.updateCommentCount(question.getId());
+
+                createNotifity(comment,question.getCreator(),commentator.getName(),question.getTitle(), NotificationTypeEnum.REPLY_QUESTION,(long) question.getId());
             }
 
         }
+    }
+
+    private void createNotifity(Comment comment, long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, long outerId) {
+        Notification notification=new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationType.getType());
+        notification.setOuterId(outerId);
+        notification.setNotifier((long)comment.getCommentator());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setReceiver(receiver);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notificationMapper.insert(notification);
     }
 
 
