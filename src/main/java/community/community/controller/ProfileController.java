@@ -45,14 +45,12 @@ public class ProfileController {
             }
         }else if ("replies".equals(action)){
             PaginationDto paginationDto=notificationService.List(user.getId(), page, size);
-            int unreadCount=notificationService.unread(user.getId());
             model.addAttribute("section","replies");
             if (paginationDto==null){
                 //以后再来补充。。。
             }else{
                 model.addAttribute("pagination",paginationDto);
             }
-            model.addAttribute("unreadCount",unreadCount);
             model.addAttribute("sectionName","最新回复");
         }
         return "profile";
