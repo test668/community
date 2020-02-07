@@ -24,9 +24,15 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDto List(Integer page, Integer size) {
+    public PaginationDto List(String search,Integer page, Integer size) {
+        if (!(StringUtils.isNullOrEmpty(search))){
+            String[] searchs=search.split(" ");
+            search=Arrays.stream(searchs).collect(Collectors.joining("|"));
+        }else {
+            search=".";
+        }
         PaginationDto paginationDto = new PaginationDto();
-        Integer totalCount = questionMapper.count();
+        Integer totalCount = questionMapper.count(search);
         if (totalCount==0){
             return new PaginationDto();
         }else {
@@ -48,7 +54,7 @@ public class QuestionService {
 
         
 
-        List<Question> questions = questionMapper.List(offset,size);
+        List<Question> questions = questionMapper.List(offset,size,search);
         List<QuestionDto> questionDtoList=new ArrayList<>();
 
         for (Question question : questions) {

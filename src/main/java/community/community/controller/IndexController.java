@@ -17,13 +17,16 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page",defaultValue = "1") Integer page,
-                        @RequestParam(name = "size",defaultValue = "5") Integer size
+                        @RequestParam(name = "size",defaultValue = "5") Integer size,
+                        @RequestParam(name = "search",required = false) String search
                         ){
-        PaginationDto pagination=questionService.List(page,size);
+        PaginationDto pagination=questionService.List(search,page,size);
         if (pagination==null){
             //以后修改
         }else {
-        model.addAttribute("pagination",pagination);}
+        model.addAttribute("pagination",pagination);
+        model.addAttribute("search",search);
+        }
         return "index";}
 
 

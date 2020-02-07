@@ -11,11 +11,11 @@ public interface QuestionMapper {
     @Insert("Insert into question (title,description,gmt_create,gmt_modifity,creator,tag) values (#{title},#{description},#{gmtCreate},#{gmtModifity},#{creator},#{tag})")
     void create(Question question);
 
-    @Select("Select * from question order by gmt_create desc limit #{offset},#{size} ")
-    List<Question> List(@Param(value = "offset") Integer offset,@Param(value = "size") Integer size);
+    @Select("Select * from question where title regexp #{search} order by gmt_create desc limit #{offset},#{size} ")
+    List<Question> List(@Param(value = "offset") Integer offset,@Param(value = "size") Integer size,@Param(value = "search") String search);
 
-    @Select("Select count(1) from question")
-    Integer count();
+    @Select("Select count(1) from question where title regexp #{search}")
+    Integer count(@Param(value = "search")String search);
 
     @Select("Select * from question where creator=#{userId} order by gmt_create desc limit #{offset},#{size}")
     List<Question> ListByUserId(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset,@Param(value = "size") Integer size);
@@ -37,5 +37,6 @@ public interface QuestionMapper {
 
     @Select("select id,title,tag from question where tag regexp #{tag} and id !=#{id}")
     List<Question> selectRelatedQuestion(Question question);
+
 
 }
