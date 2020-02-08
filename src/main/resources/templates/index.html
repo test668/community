@@ -3,7 +3,7 @@
 <head>
     <script src="js/jquery-3.4.1.min.js"></script>
     <title>my first community</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/community.css"/>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
@@ -16,21 +16,21 @@
 <div th:insert="~{common :: copy}"></div>
 <div class="container-fluid main">
     <div class="row">
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
             <hr>
 
             <div class="media" th:each="question : ${pagination.data}">
-                <div class="media-left">
+                <div class="media-left picture">
                     <a href="#">
                         <img class="media-object img-rounded"
-                            th:src="${question.user.avatarUrl}">
+                             th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" >
+                    <p class="media-heading">
                         <a th:text="${question.title}" th:href="@{'/question/'+${question.id}}"></a>
-                    </h4>
+                    </p>
                     <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复
                         <span th:text="${question.viewCount}"></span>人浏览
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
@@ -44,16 +44,16 @@
                         <a th:href="@{/(page=1,search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
-                    </li >
+                    </li>
                     <li th:if="${pagination.showPrevious}">
                         <a th:href="@{/(page=${pagination.page -1},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
-                    </li >
+                    </li>
 
                     <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}? 'active': ''">
                         <a
-                            th:text="${page}" th:href="@{/(page=${page},search=${search})}">
+                                th:text="${page}" th:href="@{/(page=${page},search=${search})}">
 
                         </a>
                     </li>
@@ -61,22 +61,23 @@
                         <a th:href="@{/(page=${pagination.page+1},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&gt;</span>
                         </a>
-                    </li >
+                    </li>
                     <li th:if="${pagination.showEndPage}">
                         <a th:href="@{/(page=${pagination.totalPage},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
-                    </li >
+                    </li>
                 </ul>
             </nav>
 
 
         </div>
 
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>热门话题</h3>
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>
