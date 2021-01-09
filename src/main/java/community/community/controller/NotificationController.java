@@ -1,16 +1,14 @@
 package community.community.controller;
 
 import community.community.dto.NotificationDto;
-import community.community.dto.PaginationDto;
+import community.community.dto.ResultDto;
 import community.community.enums.NotificationTypeEnum;
+import community.community.model.Notification;
 import community.community.model.User;
 import community.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,18 +21,35 @@ public class NotificationController {
     @GetMapping("/notification/{id}")
     public String profile(
             @PathVariable(name = "id") Integer id,
-            HttpServletRequest request)
-    {
-        User user=(User)request.getSession().getAttribute("user");
-        if (user==null){
+            HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
             return "redirect:/";
         }
-       NotificationDto notificationDto= notificationService.read(id,user);
-        if (NotificationTypeEnum.REPLY_COMMENT.getType()==notificationDto.getType()|| NotificationTypeEnum.REPLY_QUESTION.getType()==notificationDto.getType()) {
+        NotificationDto notificationDto = notificationService.read(id, user);
+        if (NotificationTypeEnum.REPLY_COMMENT.getType() == notificationDto.getType()
+                || NotificationTypeEnum.REPLY_QUESTION.getType() == notificationDto.getType()
+                || NotificationTypeEnum.LIKE_COMMENT.getType()==notificationDto.getType()
+        ) {
             return "redirect:/question/" + notificationDto.getOuterId();
-        }else {
+        } else {
             return "redirect:/";
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/notification/deleteUnread",method= RequestMethod.POST)
+    public ResultDto deleteUnread(@RequestBody Notification notification){
+        notification.setStatus(1);
+        try {
+            notificationService.deleteAllUnread(notification);
+            return ResultDto.ok0f();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultDto.error0f(203,"执行异常");
+        }
+
     }
 
 }

@@ -13,4 +13,5 @@ public class Notification {
     private Integer status;
     private String notifierName;
     private String outerTitle;
+    private long flagId;
 }

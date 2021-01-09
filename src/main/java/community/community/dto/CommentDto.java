@@ -15,4 +15,8 @@ public class CommentDto {
     private Integer type;
     private Integer commentCount;
     private User user;
+    private Integer likeStatus;
+    private Integer likeUserId;
+    private Integer status;
+    private Integer isTop;
 }

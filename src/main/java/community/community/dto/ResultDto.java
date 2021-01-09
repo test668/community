@@ -16,13 +16,15 @@ public class ResultDto<T> {
         resultDto.setMessage(message);
         return resultDto;
     }
-    public static ResultDto ok0f(){
+
+    public static ResultDto ok0f() {
         ResultDto resultDto = new ResultDto();
         resultDto.setCode(200);
         resultDto.setMessage("ok");
         return resultDto;
     }
-    public static <T> ResultDto ok0f(T t){
+
+    public static <T> ResultDto ok0f(T t) {
         ResultDto resultDto = new ResultDto();
         resultDto.setCode(200);
         resultDto.setMessage("ok");

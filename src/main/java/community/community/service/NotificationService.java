@@ -6,7 +6,6 @@ import community.community.enums.NotificationStatusEnum;
 import community.community.enums.NotificationTypeEnum;
 import community.community.exception.CustomizeException;
 import community.community.mapper.NotificationMapper;
-import community.community.mapper.UserMapper;
 import community.community.model.Notification;
 import community.community.model.User;
 import org.springframework.beans.BeanUtils;
@@ -23,13 +22,12 @@ public class NotificationService {
     private NotificationMapper notificationMapper;
 
 
-
     public PaginationDto List(Integer userId, Integer page, Integer size) {
         PaginationDto<NotificationDto> paginationDto = new PaginationDto<>();
-        Integer totalCount =notificationMapper.countByUserId((long)userId);
-        if(totalCount==0){
+        Integer totalCount = notificationMapper.countByUserId((long) userId);
+        if (totalCount == 0) {
             return new PaginationDto();
-        }else {
+        } else {
             Integer totalPage;
             if (totalCount % size == 0) {
                 totalPage = totalCount / size;
@@ -45,14 +43,14 @@ public class NotificationService {
             paginationDto.setPagination(totalPage, page);
 
             Integer offset = size * (page - 1);
-            List<Notification> notifications = notificationMapper.ListByUserId((long)userId, offset, size);
-            if (notifications.size()==0){
+            List<Notification> notifications = notificationMapper.ListByUserId((long) userId, offset, size);
+            if (notifications.size() == 0) {
                 return paginationDto;
             }
             List<NotificationDto> notificationDtoList = new ArrayList<>();
             for (Notification notification : notifications) {
-                NotificationDto notificationDto=new NotificationDto();
-                BeanUtils.copyProperties(notification,notificationDto);
+                NotificationDto notificationDto = new NotificationDto();
+                BeanUtils.copyProperties(notification, notificationDto);
                 notificationDto.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
 
                 notificationDtoList.add(notificationDto);
@@ -65,22 +63,26 @@ public class NotificationService {
 
     public Integer unread(Integer id) {
 
-        return notificationMapper.countByUserIdAndStatus((long)id,NotificationStatusEnum.UNREAD.getStatus());
+        return notificationMapper.countByUserIdAndStatus((long) id, NotificationStatusEnum.UNREAD.getStatus());
     }
 
     public NotificationDto read(Integer id, User user) {
-       Notification notification= notificationMapper.selectById(id);
-       if (notification==null){
-           throw new CustomizeException("无消息");
-       }
-       if (notification.getReceiver()!=(long)user.getId()){
-           throw new CustomizeException("错误");
-       }
-       notification.setStatus(NotificationStatusEnum.READ.getStatus());
-       notificationMapper.updateById(notification);
-        NotificationDto notificationDto=new NotificationDto();
-        BeanUtils.copyProperties(notification,notificationDto);
+        Notification notification = notificationMapper.selectById(id);
+        if (notification == null) {
+            throw new CustomizeException("无消息");
+        }
+        if (notification.getReceiver() != (long) user.getId()) {
+            throw new CustomizeException("错误");
+        }
+        notification.setStatus(NotificationStatusEnum.READ.getStatus());
+        notificationMapper.updateById(notification);
+        NotificationDto notificationDto = new NotificationDto();
+        BeanUtils.copyProperties(notification, notificationDto);
         notificationDto.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
         return notificationDto;
+    }
+
+    public void deleteAllUnread(Notification notification) {
+        notificationMapper.deleteAllNotification(notification);
     }
 }

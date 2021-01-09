@@ -14,4 +14,6 @@ public class Comment {
     private String content;
     private Integer type;
     private Integer commentCount;
+    private Integer status;
+    private Integer isTop;
 }

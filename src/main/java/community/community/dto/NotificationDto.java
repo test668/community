@@ -14,4 +14,5 @@ public class NotificationDto {
     private String typeName;
     private Long outerId;
     private Integer type;
+    private long flagId;
 }

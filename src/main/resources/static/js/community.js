@@ -37,6 +37,51 @@ function comment(e) {
     comment2target(commentId, 2, content);
 }
 
+function likeCountShow(e){
+    var id=e.getAttribute("data-id");
+    var collapse=e.getAttribute("data-collapse");
+    var likeNumber = $("#likeNumber-" + id).text();
+    var likeCount=$("#likeNumber-" + id);
+    var status=0;
+    var user=e.getAttribute("user");
+    if(!user){
+        alert("请登录");
+        return;
+    }
+    if(collapse){
+        likeNumber--;
+        likeCount.text(likeNumber);
+        e.classList.remove("active");
+        e.removeAttribute("data-collapse");
+        status=0;
+    }else{
+        likeNumber++;
+        likeCount.text(likeNumber);
+        e.classList.add("active");
+        e.setAttribute("data-collapse", "in");
+        status=1;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/comment/likeComment",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "likeCount": likeNumber,
+            "id": id,
+            "likeStatus": status
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                console.log(response);
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+
 function collapseComments(e) {
     var id = e.getAttribute("data-id");
     var comments = $("#comment-" + id);
@@ -109,5 +154,73 @@ function selectTag(value) {
 }
 function showSelectTag() {
     $("#select-tag").show();
+}
+
+function deleteComment(e) {
+    var commentId=e.getAttribute("comment-id");
+    var parentId=e.getAttribute("parent-id");
+    $.ajax({
+        type: "POST",
+        url: "/comment/deleteComment",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": commentId,
+            "parentId":parentId
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                window.location.reload();
+                console.log(response);
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+
+function topComment(e) {
+    var commentId=e.getAttribute("comment-id");
+    $.ajax({
+        type: "POST",
+        url: "/comment/topComment",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": commentId
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                window.location.reload();
+                console.log(response);
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+
+function cancelTopComment(e) {
+    var commentId=e.getAttribute("comment-id");
+    $.ajax({
+        type: "POST",
+        url: "/comment/cancelTopComment",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": commentId
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                window.location.reload();
+                console.log(response);
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
 }
 

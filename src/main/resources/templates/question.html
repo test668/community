@@ -65,6 +65,28 @@
                 </h3>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-s">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-t" th:each="comment : ${comments}">
+                    <div class="pull-left media-author">
+                        <a  th:if="${comment.commentator==question.creator}">
+                            <img class="media-author"
+                                 th:src="${'/images/author.png'}">
+                        </a>
+                    </div>
+                    <div class="pull-right media-author">
+                        <a  th:if="${comment.isTop==1}">
+                            <img class="media-author"
+                                 th:src="${'/images/top.png'}">
+                        </a>
+                    </div>
+                    <div class="btn-group pull-right">
+                        <a th:if="${(session.user !=null&&session.user.id==question.creator)||(session.user !=null&&session.user.id==comment.commentator)}" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="media-menu" th:src="${'/images/menu.png'}">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li th:if="${session.user !=null&&session.user.id==question.creator&&comment.isTop==0}"><a href="#" onclick="topComment(this)" th:comment-id="${comment.id}">置顶</a></li>
+                            <li th:if="${session.user !=null&&session.user.id==question.creator&&comment.isTop==1}"><a href="#" onclick="cancelTopComment(this)" th:comment-id="${comment.id}">取消置顶</a></li>
+                            <li><a href="#" onclick="deleteComment(this)" th:comment-id="${comment.id}" th:parent-id="${comment.parentId}">删除</a></li>
+                        </ul>
+                    </div>
                     <div class="media">
                         <div class="media-left">
                             <a href="#">
@@ -78,7 +100,19 @@
                             </h4>
                             <div><p th:text="${comment.content}"></p></div>
                             <div class="menu">
+                                <span th:if="${comment.likeStatus!=1}" th:data-id="${comment.id}" th:user="${session.user}"
+                                      onclick="likeCountShow(this)">
                                 <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                    <span th:text="${comment.likeCount}" th:id="${'likeNumber-'+comment.id}"></span>
+                                </span>
+
+                                <span th:if="${comment.likeStatus==1}" th:data-id="${comment.id}" th:user="${session.user}" data-collapse="in" class="active"
+                                      onclick="likeCountShow(this)">
+                                <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                    <span th:text="${comment.likeCount}" th:id="${'likeNumber-'+comment.id}"></span>
+                                    <input type="hidden" th:id="userId" th:value="${session.user}">
+                                </span>
+
                                 <span th:data-id="${comment.id}"
                                       onclick="collapseComments(this)">
                                     <span class="glyphicon glyphicon-comment "></span>
