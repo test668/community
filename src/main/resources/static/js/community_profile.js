@@ -46,3 +46,30 @@ function deleteUnread(e) {
     });
 }
 
+function deleteCollect(e) {
+    var id=e.getAttribute("question-id");
+    var status=0;
+    var collectNumber=e.getAttribute("collect-count");
+    collectNumber--;
+    $.ajax({
+        type: "POST",
+        url: "/question/collectQuestion",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "collectCount": collectNumber,
+            "id": id,
+            "collectStatus": status
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                console.log(response);
+                window.location.reload();
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+

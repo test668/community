@@ -85,4 +85,34 @@ public class NotificationService {
     public void deleteAllUnread(Notification notification) {
         notificationMapper.deleteAllNotification(notification);
     }
+
+    public void createNotification(long notifier, long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, long outerId, long flagId) {
+        if (receiver == notifier) {
+            return;
+        }
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationType.getType());
+        notification.setOuterId(outerId);
+        notification.setNotifier(notifier);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setReceiver(receiver);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notification.setFlagId(flagId);
+        notificationMapper.insert(notification);
+    }
+
+    public void deleteNotification(long notifier, long receiver, NotificationTypeEnum notificationType, long flagId) {
+        if (receiver == notifier) {
+            return;
+        }
+        Notification notification = new Notification();
+        notification.setFlagId(flagId);
+        notification.setNotifier(notifier);
+        notification.setReceiver(receiver);
+        notification.setType(notificationType.getType());
+        notification.setStatus(NotificationStatusEnum.delete.getStatus());
+        notificationMapper.deleteNotification(notification);
+    }
 }

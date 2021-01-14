@@ -15,4 +15,5 @@ public class Question {
     private Integer commentCount;
     private Integer likeCount;
     private Integer status;
+    private Integer collectCount;
 }

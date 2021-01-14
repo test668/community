@@ -3,7 +3,8 @@ package community.community.enums;
 public enum NotificationTypeEnum {
     REPLY_QUESTION(1, "回复了问题"),
     REPLY_COMMENT(2, "回复了评论"),
-    LIKE_COMMENT(3,"点赞了评论");
+    LIKE_COMMENT(3,"点赞了评论"),
+    LIKE_QUESTION(4,"点赞了问题");
     private int type;
     private String name;
 

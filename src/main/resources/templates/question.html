@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/css/community.css">
     <link rel="stylesheet" href="/css/editormd.preview.min.css"/>
+    <link rel="stylesheet" href="/css/iconfont.css"/>
 
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/moment.min.js" type="application/javascript"></script>
@@ -34,13 +35,12 @@
                     </span>
 
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  id="question-view">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
                     <textarea style="display:none;" th:text="${question.description}"></textarea>
                 </div>
                 <script type="text/javascript">
-                    $(function() {
-                         editormd.markdownToHTML("question-view", {
-                        });
+                    $(function () {
+                        editormd.markdownToHTML("question-view", {});
                     });
                 </script>
 
@@ -57,34 +57,71 @@
                        th:if="${session.user !=null&&session.user.id==question.creator}">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
                     </a>
+                    <span>
+                        <span th:if="${question.likeStatus!=1}" th:data-id="${question.id}" th:user="${session.user}"
+                              class="iconfont icon-zan"
+                              onclick="likeQuestion(this)">
+                    <span th:text="${question.likeCount}"
+                          th:id="${'likeNumber-'+question.id}"></span>
+                    </span>
+                        <span th:if="${question.likeStatus==1}" th:data-id="${question.id}" th:user="${session.user}"
+                              class="iconfont icon-dianzan"
+                              onclick="likeQuestion(this)" data-collapse="in">
+                    <span th:text="${question.likeCount}"
+                          th:id="${'likeNumber-'+question.id}"></span>
+                    </span>
+                    <span th:if="${question.collectStatus!=1}" th:data-id="${question.id}" th:user="${session.user}"
+                          class="iconfont icon-shoucang"
+                          onclick="collectQuestion(this)">
+                         <span>收藏</span>
+                    <span th:text="${question.collectCount}"
+                          th:id="${'collectNumber-'+question.id}"></span>
+                    </span>
+                    <span th:if="${question.collectStatus==1}" th:data-id="${question.id}" th:user="${session.user}"
+                          class="iconfont icon-star-filled"
+                          onclick="collectQuestion(this)" data-collapse="in">
+                        <span>收藏</span>
+                    <span th:text="${question.collectCount}"
+                          th:id="${'collectNumber-'+question.id}"></span>
+                    </span>
+                    </span>
+
                 </div>
+
+
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h3>
+                <h3 class="text-center">
                     <span th:text="${question.commentCount}"></span>个回复
                 </h3>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-s">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-t" th:each="comment : ${comments}">
                     <div class="pull-left media-author">
-                        <a  th:if="${comment.commentator==question.creator}">
+                        <a th:if="${comment.commentator==question.creator}">
                             <img class="media-author"
                                  th:src="${'/images/author.png'}">
                         </a>
                     </div>
                     <div class="pull-right media-author">
-                        <a  th:if="${comment.isTop==1}">
+                        <a th:if="${comment.isTop==1}">
                             <img class="media-author"
                                  th:src="${'/images/top.png'}">
                         </a>
                     </div>
                     <div class="btn-group pull-right">
-                        <a th:if="${(session.user !=null&&session.user.id==question.creator)||(session.user !=null&&session.user.id==comment.commentator)}" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a th:if="${(session.user !=null&&session.user.id==question.creator)||(session.user !=null&&session.user.id==comment.commentator)}"
+                           class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
                             <img class="media-menu" th:src="${'/images/menu.png'}">
                         </a>
                         <ul class="dropdown-menu">
-                            <li th:if="${session.user !=null&&session.user.id==question.creator&&comment.isTop==0}"><a href="#" onclick="topComment(this)" th:comment-id="${comment.id}">置顶</a></li>
-                            <li th:if="${session.user !=null&&session.user.id==question.creator&&comment.isTop==1}"><a href="#" onclick="cancelTopComment(this)" th:comment-id="${comment.id}">取消置顶</a></li>
-                            <li><a href="#" onclick="deleteComment(this)" th:comment-id="${comment.id}" th:parent-id="${comment.parentId}">删除</a></li>
+                            <li th:if="${session.user !=null&&session.user.id==question.creator&&comment.isTop==0}"><a
+                                    href="#" onclick="topComment(this)" th:comment-id="${comment.id}">置顶</a></li>
+                            <li th:if="${session.user !=null&&session.user.id==question.creator&&comment.isTop==1}"><a
+                                    href="#" onclick="cancelTopComment(this)" th:comment-id="${comment.id}">取消置顶</a>
+                            </li>
+                            <li><a href="#" onclick="deleteComment(this)" th:comment-id="${comment.id}"
+                                   th:parent-id="${comment.parentId}">删除</a></li>
                         </ul>
                     </div>
                     <div class="media">
@@ -100,18 +137,36 @@
                             </h4>
                             <div><p th:text="${comment.content}"></p></div>
                             <div class="menu">
-                                <span th:if="${comment.likeStatus!=1}" th:data-id="${comment.id}" th:user="${session.user}"
+                                <span th:if="${comment.likeStatus!=1}" th:data-id="${comment.id}"
+                                      th:user="${session.user}"
                                       onclick="likeCountShow(this)">
                                 <span class="glyphicon glyphicon-thumbs-up icon"></span>
                                     <span th:text="${comment.likeCount}" th:id="${'likeNumber-'+comment.id}"></span>
                                 </span>
 
-                                <span th:if="${comment.likeStatus==1}" th:data-id="${comment.id}" th:user="${session.user}" data-collapse="in" class="active"
+                                <span th:if="${comment.likeStatus==1}" th:data-id="${comment.id}"
+                                      th:user="${session.user}" data-collapse="in" class="active"
                                       onclick="likeCountShow(this)">
                                 <span class="glyphicon glyphicon-thumbs-up icon"></span>
                                     <span th:text="${comment.likeCount}" th:id="${'likeNumber-'+comment.id}"></span>
-                                    <input type="hidden" th:id="userId" th:value="${session.user}">
                                 </span>
+
+                                <span th:if="${comment.dislikeStatus!=1}" th:data-id="${comment.id}"
+                                      th:user="${session.user}"
+                                      onclick="dislikeComment(this)">
+                                <span class="glyphicon glyphicon-thumbs-down icon"></span>
+                                    <span th:text="${comment.dislikeCount}"
+                                          th:id="${'dislikeNumber-'+comment.id}"></span>
+                                </span>
+
+                                <span th:if="${comment.dislikeStatus==1}" th:data-id="${comment.id}"
+                                      th:user="${session.user}" data-collapse="in" class="active"
+                                      onclick="dislikeComment(this)">
+                                <span class="glyphicon glyphicon-thumbs-down icon"></span>
+                                    <span th:text="${comment.dislikeCount}"
+                                          th:id="${'dislikeNumber-'+comment.id}"></span>
+                                </span>
+
 
                                 <span th:data-id="${comment.id}"
                                       onclick="collapseComments(this)">
@@ -127,10 +182,10 @@
                                  th:id="${'comment-'+comment.id}">
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" class="form-control" placeholder="input"
+                                    <input type="text" class="form-control" th:placeholder="请输入"
                                            th:id="${'input-'+comment.id}">
                                     <button type="button" class="btn btn-success pull-right" onclick="comment(this)"
-                                            th:data-id="${comment.id}">评论
+                                            th:data-id="${comment.id}" th:id="${'input-button-'+comment.id}">评论
                                     </button>
                                 </div>
                             </div>
@@ -163,7 +218,7 @@
                         </div>
                         <input type="hidden" id="question_id" th:value="${question.id}">
                         <textarea class="form-control comment-type" rows="5" id="comment_content"></textarea>
-                        <button type="button" class="btn btn-success" onclick="post()">回复</button>
+                        <button type="button" class="btn btn-success pull-right" onclick="post()">回复</button>
                     </div>
                 </div>
             </div>
@@ -172,7 +227,7 @@
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>发起人</h4>
+                <h4>发布者</h4>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -190,10 +245,21 @@
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>相关问题</h4>
+                <h4>相关问题推荐</h4>
                 <ul class="question-related">
                     <li th:each="related : ${relateQuestions}">
                         <a th:href="@{'/question/'+${related.id}}" th:text="${related.title}"></a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>该博主的最新文章</h4>
+                <ul class="question-related">
+                    <li th:each="latestQuestion : ${latestQuestions}">
+                        <a th:href="@{'/question/'+${latestQuestion.id}}" th:text="${latestQuestion.title}"></a>
                     </li>
                 </ul>
 

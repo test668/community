@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * @Author by wyc
+ * @Date 2021/1/11.
+ */
 @Controller
 public class QuestionController {
     @Autowired
@@ -32,13 +36,15 @@ public class QuestionController {
             HttpServletRequest request
     ){
         User user = (User) request.getSession().getAttribute("user");
-        QuestionDto questionDto=questionService.getById(id);
+        QuestionDto questionDto=questionService.getById(id,user);
         List<QuestionDto> relateQuestions=questionService.selectQuestions(questionDto);
+        List<QuestionDto> latestQuestions=questionService.selectLeastQuestions(questionDto);
         List<CommentDto> comments=commentService.listByTargetId(user,id, CommentTypeEnum.QUESTION);
         questionService.incView(id);
         model.addAttribute("question",questionDto);
         model.addAttribute("comments",comments);
         model.addAttribute("relateQuestions",relateQuestions);
+        model.addAttribute("latestQuestions",latestQuestions);
         return "question";
     }
 
@@ -49,6 +55,40 @@ public class QuestionController {
             question.setStatus(1);
             questionService.deleteQuestion(question);
             return ResultDto.error0f(200,"删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultDto.error0f(2003, "执行异常");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/question/collectQuestion",method = RequestMethod.POST)
+    public ResultDto collectQuestion(@RequestBody QuestionDto questionDto,HttpServletRequest request){
+        try {
+            User user = (User) request.getSession().getAttribute("user");
+            if (user == null) {
+                return ResultDto.error0f(2002, "未登录");
+            }
+            questionDto.setUser(user);
+            questionService.collectQuestion(questionDto);
+            return ResultDto.error0f(200,"收藏成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultDto.error0f(2003, "执行异常");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/question/likeQuestion",method = RequestMethod.POST)
+    public ResultDto likeQuestion(@RequestBody QuestionDto questionDto,HttpServletRequest request){
+        try {
+            User user = (User) request.getSession().getAttribute("user");
+            if (user == null) {
+                return ResultDto.error0f(2002, "未登录");
+            }
+            questionDto.setUser(user);
+            questionService.likeQuestion(questionDto);
+            return ResultDto.error0f(200,"点赞成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultDto.error0f(2003, "执行异常");

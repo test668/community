@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/iconfont.css"/>
+
 
     <script src="/js/community_profile.js" type="application/javascript"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
@@ -25,7 +27,7 @@
                 </span>
             </div>
             <hr>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='questions'}">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='questions'||section=='collect'}">
                 <div class="media" th:each="question : ${pagination.data}">
                     <div class="media-left">
                         <a href="#">
@@ -40,13 +42,13 @@
                         <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复
                         <span th:text="${question.viewCount}"></span>人浏览
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}" ></span>
-                            <span class="pull-right">
+                            <span class="pull-right" th:if="${section=='questions'}">
                             <a href="#" onclick="deleteQuestion(this)" th:text="删除" th:question-id="${question.id}"></a>
                             </span>
+                            <span class="pull-right" th:if="${section=='collect'}">
+                            <a href="#" onclick="deleteCollect(this)" th:text="取消收藏" th:question-id="${question.id}" th:collect-count="${question.collectCount}"></a>
+                            </span>
                     </span>
-                        <div>
-
-                        </div>
                     </div>
 
                 </div>
@@ -103,8 +105,9 @@
             <div class="list-group section">
                 <a href="/profile/questions"  th:class="${section=='questions'}? 'active list-group-item': 'list-group-item'">我的问题</a>
                 <a href="/profile/replies"  th:class="${section=='replies'}? 'active list-group-item': 'list-group-item'">最新回复
-                    <span class="badge" th:text="${session.unreadCount}"></span>
+                    <span class="badge" th:if="${session.unreadCount!=0}" th:text="${session.unreadCount}"></span>
                 </a>
+                <a href="/profile/collect"  th:class="${section=='collect'}? 'active list-group-item': 'list-group-item'">我的收藏</a>
             </div>
         </div>
     </div>

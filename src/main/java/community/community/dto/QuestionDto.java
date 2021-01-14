@@ -15,6 +15,9 @@ public class QuestionDto {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private Integer likeStatus;
     private User user;
     private Integer status;
+    private Integer collectStatus;
+    private Integer collectCount;
 }

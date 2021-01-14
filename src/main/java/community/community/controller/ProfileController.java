@@ -52,6 +52,15 @@ public class ProfileController {
                 model.addAttribute("pagination",paginationDto);
             }
             model.addAttribute("sectionName","最新回复");
+        }else if ("collect".equals(action)){
+            model.addAttribute("section","collect");
+            model.addAttribute("sectionName","我收藏的问题");
+            PaginationDto paginationDto=questionService.collectQuestionList(user.getId(),page,size);
+            if (paginationDto==null){
+
+            }else {
+                model.addAttribute("pagination",paginationDto);
+            }
         }
         return "profile";
     }

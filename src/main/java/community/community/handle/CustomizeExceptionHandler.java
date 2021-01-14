@@ -1,4 +1,4 @@
-package community.community.advice;
+package community.community.handle;
 
 import community.community.exception.CustomizeException;
 import org.springframework.ui.Model;

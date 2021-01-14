@@ -7,6 +7,7 @@ import lombok.Data;
 public class Comment {
     private Integer id;
     private long parentId;
+    private long parentId2;
     private Integer commentator;
     private long gmtCreate;
     private long gmtModifity;
@@ -16,4 +17,5 @@ public class Comment {
     private Integer commentCount;
     private Integer status;
     private Integer isTop;
+    private long dislikeCount;
 }

@@ -34,6 +34,17 @@ public class CommentService {
     @Autowired
     private LikeUserCommentMapper likeUserCommentMapper;
 
+    @Autowired
+    private DislikeUserCommentMapper dislikeUserCommentMapper;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    /**
+     *
+     * @param comment
+     * @param commentator
+     */
     @Transactional
     public void insert(Comment comment, User commentator) {
         if (comment.getParentId() == 0) {
@@ -42,8 +53,30 @@ public class CommentService {
         if (comment.getType() == null || !CommentTypeEnum.isExist(comment.getType())) {
             throw new CustomizeException("评论类型不允许");
         }
-        if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
+        if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
             Comment dbComment = commentMapper.getById((int) comment.getParentId());
+            String outerTitle;
+
+            if (comment.getParentId()!=comment.getParentId2()){
+                Comment dbComment2=commentMapper.getById((int)comment.getParentId2());
+                if(dbComment2==null){
+                    throw new CustomizeException("评论不存在");
+                }else {
+                    if (dbComment2.getContent().length()>10){
+                        outerTitle=dbComment2.getContent().substring(0,10)+"...";
+                    }else{
+                        outerTitle=dbComment2.getContent();
+                    }
+                    String name=userMapper.findById(dbComment2.getCommentator()).getName();
+                    String content="@"+name+"："+comment.getContent();
+                    comment.setContent(content);
+                    Question question = questionMapper.getById((int) dbComment.getParentId());
+                    if (question == null) {
+                        throw new CustomizeException("问题不存在22");
+                    }
+                    notificationService.createNotification(comment.getCommentator(), dbComment2.getCommentator(), commentator.getName(), outerTitle, NotificationTypeEnum.REPLY_COMMENT, question.getId(), dbComment2.getId());
+                }
+            }
             if (dbComment == null) {
                 throw new CustomizeException("评论不存在");
             } else {
@@ -51,10 +84,16 @@ public class CommentService {
                 if (question == null) {
                     throw new CustomizeException("问题不存在22");
                 }
+                if (dbComment.getContent().length()>10){
+                    outerTitle=dbComment.getContent().substring(0,10)+"...";
+                }else{
+                    outerTitle=dbComment.getContent();
+                }
                 commentMapper.insert(comment);
                 commentMapper.updateCommentCount((int) comment.getParentId());
-                createNotification(comment.getCommentator(), dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId(), dbComment.getId());
+                notificationService.createNotification(comment.getCommentator(), dbComment.getCommentator(), commentator.getName(), outerTitle, NotificationTypeEnum.REPLY_COMMENT, question.getId(), dbComment.getId());
             }
+
         } else {
             Question question = questionMapper.getById((int) comment.getParentId());
             if (question == null) {
@@ -62,29 +101,12 @@ public class CommentService {
             } else {
                 commentMapper.insert(comment);
                 questionMapper.updateCommentCount(question.getId());
-
-                createNotification(comment.getCommentator(), question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId(), question.getId());
+                notificationService.createNotification(comment.getCommentator(), question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId(), question.getId());
             }
-
         }
     }
 
-    private void createNotification(long notifier, long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, long outerId, long flagId) {
-        if (receiver == notifier) {
-            return;
-        }
-        Notification notification = new Notification();
-        notification.setGmtCreate(System.currentTimeMillis());
-        notification.setType(notificationType.getType());
-        notification.setOuterId(outerId);
-        notification.setNotifier(notifier);
-        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
-        notification.setReceiver(receiver);
-        notification.setNotifierName(notifierName);
-        notification.setOuterTitle(outerTitle);
-        notification.setFlagId(flagId);
-        notificationMapper.insert(notification);
-    }
+
 
 
     public List<CommentDto> listByTargetId(User loginUser, Integer id, CommentTypeEnum type) {
@@ -118,13 +140,18 @@ public class CommentService {
         if (loginUser != null && type.getType() == 1) {
             LikeUserComment likeUserComment = new LikeUserComment();
             likeUserComment.setLikeUserId(loginUser.getId());
+            DislikeUserComment dislikeUserComment=new DislikeUserComment();
+            dislikeUserComment.setDislikeUserId(loginUser.getId());
             commentDtos = comments.stream().map(comment -> {
                 CommentDto commentDto = new CommentDto();
                 BeanUtils.copyProperties(comment, commentDto);
                 commentDto.setUser(userMap.get(comment.getCommentator()));
                 likeUserComment.setLikeCommentId(comment.getId());
-                int status = likeUserCommentMapper.findStatus(likeUserComment);
-                commentDto.setLikeStatus(status);
+                dislikeUserComment.setDislikeCommentId(comment.getId());
+                int likeStatus = likeUserCommentMapper.findStatus(likeUserComment);
+                int dislikeStatus=dislikeUserCommentMapper.findStatus(dislikeUserComment);
+                commentDto.setLikeStatus(likeStatus);
+                commentDto.setDislikeStatus(dislikeStatus);
                 return commentDto;
             }).collect(Collectors.toList());
         } else {
@@ -182,28 +209,20 @@ public class CommentService {
         Question question = questionMapper.getById((int) commentById.getParentId());
         String notifityName = commentDto.getUser().getName();
         String outerTitle = null;
-        if (commentById.getContent().length() > 3) {
-            outerTitle = commentById.getContent().substring(0, 3) + "...";
+        if (commentById.getContent().length() > 10) {
+            outerTitle = commentById.getContent().substring(0, 10) + "...";
         } else {
             outerTitle = commentById.getContent();
         }
         if (commentDto.getLikeStatus() != 0) {
-            createNotification(commentDto.getLikeUserId(), commentById.getCommentator(), notifityName, outerTitle, NotificationTypeEnum.LIKE_COMMENT, question.getId(), commentById.getId());
+            notificationService.createNotification(commentDto.getLikeUserId(), commentById.getCommentator(), notifityName, outerTitle, NotificationTypeEnum.LIKE_COMMENT, question.getId(), commentById.getId());
         } else {
-            deleteNotification(commentDto.getLikeUserId(), commentById.getCommentator(), NotificationTypeEnum.LIKE_COMMENT, commentById.getId());
+            notificationService.deleteNotification(commentDto.getLikeUserId(), commentById.getCommentator(), NotificationTypeEnum.LIKE_COMMENT, commentById.getId());
         }
 
     }
 
-    public void deleteNotification(long notifier, long receiver, NotificationTypeEnum notificationType, long flagId) {
-        Notification notification = new Notification();
-        notification.setFlagId(flagId);
-        notification.setNotifier(notifier);
-        notification.setReceiver(receiver);
-        notification.setType(notificationType.getType());
-        notification.setStatus(NotificationStatusEnum.delete.getStatus());
-        notificationMapper.deleteNotification(notification);
-    }
+
 
     public void deleteComment(Comment comment) {
         Question question = new Question();
@@ -215,4 +234,28 @@ public class CommentService {
     public void topComment(Comment comment) {
         commentMapper.topComment(comment);
     }
+
+    public void dislikeComment(CommentDto commentDto) {
+        DislikeUserComment dislikeUserComment=new DislikeUserComment();
+        dislikeUserComment.setDislikeUserId(commentDto.getDislikeUserId());
+        dislikeUserComment.setDislikeCommentId(commentDto.getId());
+        dislikeUserComment.setStatus(commentDto.getDislikeStatus());
+        DislikeUserComment dislikeUserComment1=dislikeUserCommentMapper.findIsUpdate(dislikeUserComment);
+        if(dislikeUserComment1!=null){
+            dislikeUserComment.setId(dislikeUserComment1.getId());
+            dislikeUserComment.setGmtModifity(System.currentTimeMillis());
+            dislikeUserCommentMapper.updateStatus(dislikeUserComment);
+        }else{
+            dislikeUserComment.setGmtCreate(System.currentTimeMillis());
+            dislikeUserComment.setGmtModifity(System.currentTimeMillis());
+            dislikeUserCommentMapper.insert(dislikeUserComment);
+        }
+
+        Comment comment=new Comment();
+        comment.setId(commentDto.getId());
+        comment.setDislikeCount(commentDto.getDislikeCount());
+        comment.setGmtModifity(System.currentTimeMillis());
+        commentMapper.updateDislikeCount(comment);
+    }
+
 }

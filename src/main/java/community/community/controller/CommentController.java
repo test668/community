@@ -36,6 +36,7 @@ public class CommentController {
         }
         Comment comment = new Comment();
         comment.setParentId(commentCreateDto.getParentId());
+        comment.setParentId2((commentCreateDto.getParentId2()));
         comment.setContent(commentCreateDto.getContent());
         comment.setType(commentCreateDto.getType());
         comment.setGmtCreate(System.currentTimeMillis());
@@ -64,6 +65,25 @@ public class CommentController {
             commentDto.setUser(user);
             commentDto.setLikeUserId(user.getId());
             commentService.likeComment(commentDto);
+            return ResultDto.ok0f();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultDto.error0f(2003, "执行异常");
+        }
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/dislikeComment",method = RequestMethod.POST)
+    public ResultDto dislikeComment(@RequestBody CommentDto commentDto,HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return ResultDto.error0f(2002, "未登录");
+        }
+        try {
+            commentDto.setUser(user);
+            commentDto.setDislikeUserId(user.getId());
+            commentService.dislikeComment(commentDto);
             return ResultDto.ok0f();
         } catch (Exception e) {
             e.printStackTrace();

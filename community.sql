@@ -11,11 +11,32 @@
  Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 08/01/2021 17:57:30
+ Date: 14/01/2021 18:44:56
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for collect_user_question
+-- ----------------------------
+DROP TABLE IF EXISTS `collect_user_question`;
+CREATE TABLE `collect_user_question`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `collect_user_id` int(11) NULL DEFAULT NULL,
+  `collect_question_id` int(11) NULL DEFAULT NULL,
+  `status` int(11) NULL DEFAULT 0 COMMENT '0表示该问题未被收藏，1表示被收藏',
+  `gmt_create` bigint(255) NULL DEFAULT NULL,
+  `gmt_modifity` bigint(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of collect_user_question
+-- ----------------------------
+INSERT INTO `collect_user_question` VALUES (1, 2, 8, 1, 1610437902155, 1610445637580);
+INSERT INTO `collect_user_question` VALUES (2, 2, 6, 1, 1610444639618, 1610444639618);
+INSERT INTO `collect_user_question` VALUES (3, 2, 11, 1, 1610444644456, 1610500410435);
 
 -- ----------------------------
 -- Table structure for comment
@@ -33,26 +54,56 @@ CREATE TABLE `comment`  (
   `comment_count` int(11) NULL DEFAULT 0,
   `status` int(11) NULL DEFAULT 0 COMMENT '0为正常，1为已删除',
   `is_top` int(11) NULL DEFAULT 0 COMMENT '0为正常，1为置顶',
+  `dislike_count` bigint(20) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of comment
 -- ----------------------------
-INSERT INTO `comment` VALUES (1, 2, 2, 1589089834502, 1589089834502, 0, 'ffa', 1, 1, 0, 0);
-INSERT INTO `comment` VALUES (2, 1, 2, 1589089873488, 1589089873488, 0, 'oi', 2, 0, 0, 0);
-INSERT INTO `comment` VALUES (3, 4, 2, 1589092433480, 1610097130679, 0, 'ff', 1, 0, 0, 0);
-INSERT INTO `comment` VALUES (4, 7, 3, 1589181458825, 1610072126378, 0, 'fdsf', 1, 2, 0, 0);
-INSERT INTO `comment` VALUES (5, 4, 2, 1589181597210, 1589181597210, 0, 'fsdfadf', 2, 0, 0, 0);
-INSERT INTO `comment` VALUES (6, 8, 2, 1589181880246, 1610072560331, 2, 'fsdfs', 1, 0, 0, 0);
-INSERT INTO `comment` VALUES (7, 8, 2, 1589461413183, 1610072549070, 1, '你好', 1, 0, 0, 0);
-INSERT INTO `comment` VALUES (8, 4, 2, 1610001721230, 1610001721230, 0, 'eff', 2, 0, 0, 0);
-INSERT INTO `comment` VALUES (9, 6, 2, 1610087625574, 1610087625574, 0, '15656', 1, 0, 1, 0);
-INSERT INTO `comment` VALUES (10, 6, 2, 1610089379742, 1610089379742, 0, '啊实打实大大', 1, 0, 1, 0);
-INSERT INTO `comment` VALUES (11, 6, 2, 1610089389692, 1610089389692, 0, 'dada', 1, 0, 1, 0);
-INSERT INTO `comment` VALUES (12, 4, 2, 1610093817095, 1610095472232, 0, '2222565656', 1, 0, 0, 0);
-INSERT INTO `comment` VALUES (13, 4, 2, 1610093828096, 1610093828096, 0, 'dsdsad', 1, 0, 0, 0);
-INSERT INTO `comment` VALUES (14, 4, 2, 1610093843310, 1610093855480, 0, '1111222', 1, 0, 0, 1);
+INSERT INTO `comment` VALUES (1, 2, 2, 1589089834502, 1589089834502, 0, 'ffa', 1, 1, 0, 0, 0);
+INSERT INTO `comment` VALUES (2, 1, 2, 1589089873488, 1589089873488, 0, 'oi', 2, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (3, 4, 2, 1589092433480, 1610609737020, 0, 'ff', 1, 0, 0, 0, 1);
+INSERT INTO `comment` VALUES (4, 7, 3, 1589181458825, 1610609561913, 0, 'fdsf', 1, 2, 0, 1, 1);
+INSERT INTO `comment` VALUES (5, 4, 2, 1589181597210, 1589181597210, 0, 'fsdfadf', 2, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (6, 8, 2, 1589181880246, 1610421568661, 1, 'fsdfs', 1, 2, 0, 0, 1);
+INSERT INTO `comment` VALUES (7, 8, 2, 1589461413183, 1610358428959, 1, '你好', 1, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (8, 4, 2, 1610001721230, 1610418134093, 0, 'eff', 2, 0, 0, 0, -1);
+INSERT INTO `comment` VALUES (9, 6, 2, 1610087625574, 1610087625574, 0, '15656', 1, 0, 1, 0, 0);
+INSERT INTO `comment` VALUES (10, 6, 2, 1610089379742, 1610089379742, 0, '啊实打实大大', 1, 0, 1, 0, 0);
+INSERT INTO `comment` VALUES (11, 6, 2, 1610089389692, 1610089389692, 0, 'dada', 1, 0, 1, 0, 0);
+INSERT INTO `comment` VALUES (12, 4, 2, 1610093817095, 1610095472232, 0, '2222565656', 1, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (13, 4, 2, 1610093828096, 1610093828096, 0, 'dsdsad', 1, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (14, 4, 2, 1610093843310, 1610620985717, 1, '1111222', 1, 2, 0, 1, 1);
+INSERT INTO `comment` VALUES (15, 11, 2, 1610519146513, 1610519146513, 0, '22', 1, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (16, 6, 2, 1610618857685, 1610618857685, 0, '225', 2, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (17, 6, 2, 1610618879188, 1610618879188, 0, '@Github：ddadd', 2, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (18, 14, 2, 1610621007318, 1610621007318, 0, '16154', 2, 0, 0, 0, 0);
+INSERT INTO `comment` VALUES (19, 14, 2, 1610621029570, 1610621029570, 0, '@Github：test', 2, 0, 0, 0, 0);
+
+-- ----------------------------
+-- Table structure for dislike_user_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `dislike_user_comment`;
+CREATE TABLE `dislike_user_comment`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dislike_user_id` int(11) NULL DEFAULT NULL,
+  `dislike_comment_id` int(11) NULL DEFAULT NULL,
+  `status` int(11) NULL DEFAULT NULL COMMENT '0表示未被点踩，1表示点踩',
+  `gmt_create` bigint(255) NULL DEFAULT NULL,
+  `gmt_modifity` bigint(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of dislike_user_comment
+-- ----------------------------
+INSERT INTO `dislike_user_comment` VALUES (1, 2, 6, 1, 1610333300076, 1610333300076);
+INSERT INTO `dislike_user_comment` VALUES (2, 2, 7, 0, 1610333485099, 1610358428956);
+INSERT INTO `dislike_user_comment` VALUES (3, 2, 4, 1, 1610356687401, 1610609561906);
+INSERT INTO `dislike_user_comment` VALUES (4, 2, 8, 0, 1610418134083, 1610418134083);
+INSERT INTO `dislike_user_comment` VALUES (5, 2, 3, 1, 1610609737012, 1610609737012);
+INSERT INTO `dislike_user_comment` VALUES (6, 2, 14, 1, 1610620985711, 1610620985711);
 
 -- ----------------------------
 -- Table structure for like_user_comment
@@ -71,9 +122,31 @@ CREATE TABLE `like_user_comment`  (
 -- ----------------------------
 -- Records of like_user_comment
 -- ----------------------------
-INSERT INTO `like_user_comment` VALUES (1, 2, 6, 1, 1610005639512, 1610072560328);
+INSERT INTO `like_user_comment` VALUES (1, 2, 6, 0, 1610005639512, 1610421568652);
 INSERT INTO `like_user_comment` VALUES (2, 2, 7, 0, 1610005678778, 1610072549064);
-INSERT INTO `like_user_comment` VALUES (3, 2, 4, 0, 1610005940608, 1610072126374);
+INSERT INTO `like_user_comment` VALUES (3, 2, 4, 0, 1610005940608, 1610417577251);
+INSERT INTO `like_user_comment` VALUES (4, 2, 14, 1, 1610620984906, 1610620984906);
+
+-- ----------------------------
+-- Table structure for like_user_question
+-- ----------------------------
+DROP TABLE IF EXISTS `like_user_question`;
+CREATE TABLE `like_user_question`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `like_user_id` int(11) NULL DEFAULT NULL,
+  `like_question_id` int(11) NULL DEFAULT NULL,
+  `status` int(11) NULL DEFAULT 0 COMMENT '0表示该问题未被点赞，1表示该问题被点赞',
+  `gmt_create` bigint(20) NULL DEFAULT NULL,
+  `gmt_modifity` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of like_user_question
+-- ----------------------------
+INSERT INTO `like_user_question` VALUES (1, 2, 11, 0, 1610595005157, 1610595537391);
+INSERT INTO `like_user_question` VALUES (2, 2, 7, 0, 1610595551904, 1610595620248);
+INSERT INTO `like_user_question` VALUES (3, 2, 5, 0, 1610595606624, 1610595610193);
 
 -- ----------------------------
 -- Table structure for notification
@@ -89,9 +162,9 @@ CREATE TABLE `notification`  (
   `status` int(11) NULL DEFAULT NULL COMMENT '0未读，1已读，2删除',
   `notifier_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `outer_title` varchar(502) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `flag_id` bigint(20) NULL DEFAULT NULL COMMENT '记录被评论的问题，评论，以及被点赞的评论的id',
+  `flag_id` bigint(20) NULL DEFAULT NULL COMMENT '记录被评论的问题，评论，以及被点赞的评论或者问题的id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of notification
@@ -110,6 +183,20 @@ INSERT INTO `notification` VALUES (11, 2, 2, 8, 3, 1610008269821, 1, 'Github', '
 INSERT INTO `notification` VALUES (12, 2, 2, 8, 3, 1610008872090, 1, 'Github', 'fsd...', 0);
 INSERT INTO `notification` VALUES (13, 2, 2, 8, 3, 1610012168784, 2, 'Github', '你好', 7);
 INSERT INTO `notification` VALUES (14, 2, 2, 8, 3, 1610012346139, 2, 'Github', '你好', 7);
+INSERT INTO `notification` VALUES (15, 2, 3, 7, 3, 1610356689500, 2, 'Github', 'fds...', 4);
+INSERT INTO `notification` VALUES (16, 2, 3, 7, 3, 1610417573573, 2, 'Github', 'fds...', 4);
+INSERT INTO `notification` VALUES (17, 2, 2, 11, 4, 1610595168019, 2, 'Github', '3.用户删除自己的评...', 11);
+INSERT INTO `notification` VALUES (18, 2, 2, 11, 4, 1610595192435, 2, 'Github', '3.用户删除自己的评...', 11);
+INSERT INTO `notification` VALUES (19, 2, 2, 7, 4, 1610595551914, 2, 'Github', 'dad', 7);
+INSERT INTO `notification` VALUES (20, 2, 2, 7, 4, 1610595594101, 2, 'Github', 'dad', 7);
+INSERT INTO `notification` VALUES (21, 2, 2, 5, 4, 1610595606631, 2, 'Github', 'daddad', 5);
+INSERT INTO `notification` VALUES (22, 2, 2, 8, 2, 1610618857706, 1, 'Github', 'dasdaf', 6);
+INSERT INTO `notification` VALUES (23, 2, 2, 6, 2, 1610618879192, 1, 'Github', 'ada', 16);
+INSERT INTO `notification` VALUES (24, 2, 2, 8, 2, 1610618879199, 1, 'Github', 'dasdaf', 6);
+INSERT INTO `notification` VALUES (25, 2, 2, 4, 3, 1610620984919, 1, 'Github', '1111222', 14);
+INSERT INTO `notification` VALUES (26, 2, 2, 4, 2, 1610621007339, 1, 'Github', '1111222', 14);
+INSERT INTO `notification` VALUES (27, 2, 2, 4, 2, 1610621029574, 1, 'Github', '16154', 18);
+INSERT INTO `notification` VALUES (28, 2, 2, 4, 2, 1610621029580, 1, 'Github', '1111222', 14);
 
 -- ----------------------------
 -- Table structure for question
@@ -127,23 +214,24 @@ CREATE TABLE `question`  (
   `comment_count` int(11) NULL DEFAULT 0,
   `like_count` int(11) NULL DEFAULT 0,
   `status` int(11) NULL DEFAULT 0 COMMENT '0为正常，1表示已删除',
+  `collect_count` int(11) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of question
 -- ----------------------------
-INSERT INTO `question` VALUES (2, 'duidui', 'private UserMapper userMapper;\r\n\r\n    @Autowired\r\n    private NotificationMapper notificationMapper;\r\n\r\n    @Transactional\r\n    public void insert(Comment comment, User commentator) {\r\n        if (comment.getParentId()==0){\r\n            throw new CustomizeException(\"回复的问题不存在\");\r\n        }\r\n        if (comment.getType()==null|| !CommentTypeEnum.isExist(comment.getType())){\r\n            throw new CustomizeException(\"评论类型不允许\");\r\n        }\r\n        if (comment.getType()==CommentTypeEnum.COMMENT.getType()){\r\n         Comment dbComment= commentMapper.getById((int)comment.getParentId());\r\n         if (dbComment==null){\r\n             throw new CustomizeException(\"评论不存在\");', 'java,spring', 1589089701819, 1589089701819, 2, 10, 1, 0, 1);
-INSERT INTO `question` VALUES (3, 'ada', 'dad', 'java', 1589089817051, 1589089817051, 2, 1, 0, 0, 1);
-INSERT INTO `question` VALUES (4, 'hdiadja', 'fdf', 'java', 1589092419446, 1589092419446, 2, 92, 4, 0, 0);
-INSERT INTO `question` VALUES (5, 'daddad', 'asdas', 'java', 1589093023437, 1589093023437, 2, 10, 0, 0, 0);
-INSERT INTO `question` VALUES (6, 'ada', 'ada', 'java', 1589093031429, 1589093031429, 2, 13, 0, 0, 0);
-INSERT INTO `question` VALUES (7, 'dad', 'aa', 'java', 1589093042667, 1589093042667, 2, 48, 1, 0, 0);
-INSERT INTO `question` VALUES (8, 'dasdaf', 'dfdafadfasd', 'java', 1589181860905, 1589181860905, 3, 172, 2, 0, 0);
-INSERT INTO `question` VALUES (9, '                            <li><a href=\"#\" onclick=\"deleteComment(this)\" th:comment-id=\"${comment.id}\" th:parent-id=\"${comment.parentId}\">删除</a></li>', 'public List<CommentDto> listByTargetId(User loginUser,Integer id, CommentTypeEnum type) {\r\n       List<Comment> comments=commentMapper.ListById(id, type.getType());\r\n       if (comments.size()==0){\r\n           return new ArrayList<>();\r\n       }\r\n\r\n        Collections.sort(comments, new Comparator<Comment>() {\r\n            @Override\r\n            public int compare(Comment o1, Comment o2) {\r\n                return (int)(o2.getLikeCount()-o1.getLikeCount());\r\n            }\r\n        });\r\n        Set<Integer> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());\r\n        List<Integer> userIds=new ArrayList();\r\n        userIds.addAll(commentators);\r\n\r\n        //修改处\r\n        List<User> users=new ArrayList<>();\r\n        for (Integer userId : userIds) {\r\n            User user = userMapper.findById(userId);\r\n            users.add(user);\r\n        }\r\n\r\n\r\n\r\n        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));\r\n\r\n\r\n        List<CommentDto> commentDtos;\r\n        if(loginUser!=null&&type.getType()==1){\r\n            LikeUserComment likeUserComment=new LikeUserComment();\r\n            likeUserComment.setLikeUserId(loginUser.getId());\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                likeUserComment.setLikeCommentId(comment.getId());\r\n                int status = likeUserCommentMapper.findStatus(likeUserComment);\r\n                commentDto.setLikeStatus(status);\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }else{\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }\r\n        List<CommentDto> commentDtoList=new ArrayList<>();\r\n        List<CommentDto> topCommentDtos=new ArrayList<>();\r\n        List<CommentDto> notTopCommentDtos=new ArrayList<>();\r\n        commentDtos.forEach(commentDto -> {\r\n            if (commentDto.getIsTop()==1){\r\n                topCommentDtos.add(commentDto);\r\n            }else{\r\n                notTopCommentDtos.add(commentDto);\r\n            }\r\n        });\r\n        if (!topCommentDtos.isEmpty()){\r\n            commentDtoList.addAll(topCommentDtos);\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }else{\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }\r\n        return commentDtoList;\r\n\r\n    }', 'java', 1610097988924, 1610097988924, 2, 2, 0, 0, 1);
-INSERT INTO `question` VALUES (10, '2.点赞评论，问题，评论中加上作者标识（完成）', 'public List<CommentDto> listByTargetId(User loginUser,Integer id, CommentTypeEnum type) {\r\n       List<Comment> comments=commentMapper.ListById(id, type.getType());\r\n       if (comments.size()==0){\r\n           return new ArrayList<>();\r\n       }\r\n\r\n        Collections.sort(comments, new Comparator<Comment>() {\r\n            @Override\r\n            public int compare(Comment o1, Comment o2) {\r\n                return (int)(o2.getLikeCount()-o1.getLikeCount());\r\n            }\r\n        });\r\n        Set<Integer> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());\r\n        List<Integer> userIds=new ArrayList();\r\n        userIds.addAll(commentators);\r\n\r\n        //修改处\r\n        List<User> users=new ArrayList<>();\r\n        for (Integer userId : userIds) {\r\n            User user = userMapper.findById(userId);\r\n            users.add(user);\r\n        }\r\n\r\n\r\n\r\n        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));\r\n\r\n\r\n        List<CommentDto> commentDtos;\r\n        if(loginUser!=null&&type.getType()==1){\r\n            LikeUserComment likeUserComment=new LikeUserComment();\r\n            likeUserComment.setLikeUserId(loginUser.getId());\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                likeUserComment.setLikeCommentId(comment.getId());\r\n                int status = likeUserCommentMapper.findStatus(likeUserComment);\r\n                commentDto.setLikeStatus(status);\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }else{\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }\r\n        List<CommentDto> commentDtoList=new ArrayList<>();\r\n        List<CommentDto> topCommentDtos=new ArrayList<>();\r\n        List<CommentDto> notTopCommentDtos=new ArrayList<>();\r\n        commentDtos.forEach(commentDto -> {\r\n            if (commentDto.getIsTop()==1){\r\n                topCommentDtos.add(commentDto);\r\n            }else{\r\n                notTopCommentDtos.add(commentDto);\r\n            }\r\n        });\r\n        if (!topCommentDtos.isEmpty()){\r\n            commentDtoList.addAll(topCommentDtos);\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }else{\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }\r\n        return commentDtoList;\r\n\r\n    }', 'java', 1610098261767, 1610098261767, 2, 3, 0, 0, 0);
-INSERT INTO `question` VALUES (11, '3.用户删除自己的评论以及问题（完成）', 'if (comment.getParentId()==0){\r\n            throw new CustomizeException(\"回复的问题不存在\");\r\n        }\r\n        if (comment.getType()==null|| !CommentTypeEnum.isExist(comment.getType())){\r\n            throw new CustomizeException(\"评论类型不允许\");\r\n        }\r\n        if (comment.getType()==CommentTypeEnum.COMMENT.getType()){\r\n         Comment dbComment= commentMapper.getById((int)comment.getParentId());\r\n         if (dbComment==null){\r\n             throw new CustomizeException(\"评论不存在\");\r\n         }\r\n         else {\r\n             Question question = questionMapper.getById((int) dbComment.getParentId());\r\n             if (question==null){\r\n                 throw new CustomizeException(\"问题不存在22\");\r\n             }\r\n             commentMapper.insert(comment);\r\n             commentMapper.updateCommentCount((int)comment.getParentId());\r\n             createNotification(comment.getCommentator(), dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT,question.getId(),dbComment.getId());\r\n         }\r\n        }\r\n        else{\r\n            Question question = questionMapper.getById((int) comment.getParentId());\r\n            if (question==null){\r\n                throw new CustomizeException(\"问题不存在\");\r\n            }\r\n            else{\r\n                commentMapper.insert(comment);\r\n                questionMapper.updateCommentCount(question.getId());\r\n\r\n                createNotification(comment.getCommentator(),question.getCreator(),commentator.getName(),question.getTitle(), NotificationTypeEnum.REPLY_QUESTION,question.getId(),question.getId());\r\n            }\r\n\r\n        }', 'java', 1610098749625, 1610098749625, 2, 2, 0, 0, 0);
-INSERT INTO `question` VALUES (12, 'dsd', '`Notification notification = notificationMapper.selectById(id);\r\n        if (notification == null) {\r\n            throw new CustomizeException(\"无消息\");\r\n        }\r\n        if (notification.getReceiver() != (long) user.getId()) {\r\n            throw new CustomizeException(\"错误\");\r\n        }\r\n        notification.setStatus(NotificationStatusEnum.READ.getStatus());\r\n        notificationMapper.updateById(notification);\r\n        NotificationDto notificationDto = new NotificationDto();\r\n        BeanUtils.copyProperties(notification, notificationDto);\r\n        notificationDto.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));\r\n        return notificationDto;`', 'java', 1610099128801, 1610099128801, 2, 1, 0, 0, 1);
+INSERT INTO `question` VALUES (2, 'duidui', 'private UserMapper userMapper;\r\n\r\n    @Autowired\r\n    private NotificationMapper notificationMapper;\r\n\r\n    @Transactional\r\n    public void insert(Comment comment, User commentator) {\r\n        if (comment.getParentId()==0){\r\n            throw new CustomizeException(\"回复的问题不存在\");\r\n        }\r\n        if (comment.getType()==null|| !CommentTypeEnum.isExist(comment.getType())){\r\n            throw new CustomizeException(\"评论类型不允许\");\r\n        }\r\n        if (comment.getType()==CommentTypeEnum.COMMENT.getType()){\r\n         Comment dbComment= commentMapper.getById((int)comment.getParentId());\r\n         if (dbComment==null){\r\n             throw new CustomizeException(\"评论不存在\");', 'java,spring', 1589089701819, 1589089701819, 2, 10, 1, 0, 1, 0);
+INSERT INTO `question` VALUES (3, 'ada', 'dad', 'java', 1589089817051, 1589089817051, 2, 1, 0, 0, 1, 0);
+INSERT INTO `question` VALUES (4, 'hdiadja', 'fdf', 'java', 1589092419446, 1589092419446, 2, 108, 4, 0, 0, 0);
+INSERT INTO `question` VALUES (5, 'daddad', 'asdas', 'java', 1589093023437, 1589093023437, 2, 14, 0, 0, 1, 0);
+INSERT INTO `question` VALUES (6, 'ada', 'ada', 'java', 1589093031429, 1589093031429, 2, 20, 0, 0, 0, 1);
+INSERT INTO `question` VALUES (7, 'dad', 'aa', 'java', 1589093042667, 1589093042667, 2, 109, 1, 0, 0, 0);
+INSERT INTO `question` VALUES (8, 'dasdaf', 'dfdafadfasd', 'java', 1589181860905, 1589181860905, 3, 315, 2, 0, 0, 1);
+INSERT INTO `question` VALUES (9, '                            <li><a href=\"#\" onclick=\"deleteComment(this)\" th:comment-id=\"${comment.id}\" th:parent-id=\"${comment.parentId}\">删除</a></li>', 'public List<CommentDto> listByTargetId(User loginUser,Integer id, CommentTypeEnum type) {\r\n       List<Comment> comments=commentMapper.ListById(id, type.getType());\r\n       if (comments.size()==0){\r\n           return new ArrayList<>();\r\n       }\r\n\r\n        Collections.sort(comments, new Comparator<Comment>() {\r\n            @Override\r\n            public int compare(Comment o1, Comment o2) {\r\n                return (int)(o2.getLikeCount()-o1.getLikeCount());\r\n            }\r\n        });\r\n        Set<Integer> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());\r\n        List<Integer> userIds=new ArrayList();\r\n        userIds.addAll(commentators);\r\n\r\n        //修改处\r\n        List<User> users=new ArrayList<>();\r\n        for (Integer userId : userIds) {\r\n            User user = userMapper.findById(userId);\r\n            users.add(user);\r\n        }\r\n\r\n\r\n\r\n        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));\r\n\r\n\r\n        List<CommentDto> commentDtos;\r\n        if(loginUser!=null&&type.getType()==1){\r\n            LikeUserComment likeUserComment=new LikeUserComment();\r\n            likeUserComment.setLikeUserId(loginUser.getId());\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                likeUserComment.setLikeCommentId(comment.getId());\r\n                int status = likeUserCommentMapper.findStatus(likeUserComment);\r\n                commentDto.setLikeStatus(status);\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }else{\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }\r\n        List<CommentDto> commentDtoList=new ArrayList<>();\r\n        List<CommentDto> topCommentDtos=new ArrayList<>();\r\n        List<CommentDto> notTopCommentDtos=new ArrayList<>();\r\n        commentDtos.forEach(commentDto -> {\r\n            if (commentDto.getIsTop()==1){\r\n                topCommentDtos.add(commentDto);\r\n            }else{\r\n                notTopCommentDtos.add(commentDto);\r\n            }\r\n        });\r\n        if (!topCommentDtos.isEmpty()){\r\n            commentDtoList.addAll(topCommentDtos);\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }else{\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }\r\n        return commentDtoList;\r\n\r\n    }', 'java', 1610097988924, 1610097988924, 2, 2, 0, 0, 1, 0);
+INSERT INTO `question` VALUES (10, '2.点赞评论，问题，评论中加上作者标识（完成）', 'public List<CommentDto> listByTargetId(User loginUser,Integer id, CommentTypeEnum type) {\r\n       List<Comment> comments=commentMapper.ListById(id, type.getType());\r\n       if (comments.size()==0){\r\n           return new ArrayList<>();\r\n       }\r\n\r\n        Collections.sort(comments, new Comparator<Comment>() {\r\n            @Override\r\n            public int compare(Comment o1, Comment o2) {\r\n                return (int)(o2.getLikeCount()-o1.getLikeCount());\r\n            }\r\n        });\r\n        Set<Integer> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());\r\n        List<Integer> userIds=new ArrayList();\r\n        userIds.addAll(commentators);\r\n\r\n        //修改处\r\n        List<User> users=new ArrayList<>();\r\n        for (Integer userId : userIds) {\r\n            User user = userMapper.findById(userId);\r\n            users.add(user);\r\n        }\r\n\r\n\r\n\r\n        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));\r\n\r\n\r\n        List<CommentDto> commentDtos;\r\n        if(loginUser!=null&&type.getType()==1){\r\n            LikeUserComment likeUserComment=new LikeUserComment();\r\n            likeUserComment.setLikeUserId(loginUser.getId());\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                likeUserComment.setLikeCommentId(comment.getId());\r\n                int status = likeUserCommentMapper.findStatus(likeUserComment);\r\n                commentDto.setLikeStatus(status);\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }else{\r\n            commentDtos = comments.stream().map(comment -> {\r\n                CommentDto commentDto = new CommentDto();\r\n                BeanUtils.copyProperties(comment,commentDto);\r\n                commentDto.setUser(userMap.get(comment.getCommentator()));\r\n                return commentDto;\r\n            }).collect(Collectors.toList());\r\n        }\r\n        List<CommentDto> commentDtoList=new ArrayList<>();\r\n        List<CommentDto> topCommentDtos=new ArrayList<>();\r\n        List<CommentDto> notTopCommentDtos=new ArrayList<>();\r\n        commentDtos.forEach(commentDto -> {\r\n            if (commentDto.getIsTop()==1){\r\n                topCommentDtos.add(commentDto);\r\n            }else{\r\n                notTopCommentDtos.add(commentDto);\r\n            }\r\n        });\r\n        if (!topCommentDtos.isEmpty()){\r\n            commentDtoList.addAll(topCommentDtos);\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }else{\r\n            commentDtoList.addAll(notTopCommentDtos);\r\n        }\r\n        return commentDtoList;\r\n\r\n    }', 'java', 1610098261767, 1610098261767, 2, 12, 0, 0, 0, 0);
+INSERT INTO `question` VALUES (11, '3.用户删除自己的评论以及问题（完成）', 'if (comment.getParentId()==0){\r\n            throw new CustomizeException(\"回复的问题不存在\");\r\n        }\r\n        if (comment.getType()==null|| !CommentTypeEnum.isExist(comment.getType())){\r\n            throw new CustomizeException(\"评论类型不允许\");\r\n        }\r\n        if (comment.getType()==CommentTypeEnum.COMMENT.getType()){\r\n         Comment dbComment= commentMapper.getById((int)comment.getParentId());\r\n         if (dbComment==null){\r\n             throw new CustomizeException(\"评论不存在\");\r\n         }\r\n         else {\r\n             Question question = questionMapper.getById((int) dbComment.getParentId());\r\n             if (question==null){\r\n                 throw new CustomizeException(\"问题不存在22\");\r\n             }\r\n             commentMapper.insert(comment);\r\n             commentMapper.updateCommentCount((int)comment.getParentId());\r\n             createNotification(comment.getCommentator(), dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT,question.getId(),dbComment.getId());\r\n         }\r\n        }\r\n        else{\r\n            Question question = questionMapper.getById((int) comment.getParentId());\r\n            if (question==null){\r\n                throw new CustomizeException(\"问题不存在\");\r\n            }\r\n            else{\r\n                commentMapper.insert(comment);\r\n                questionMapper.updateCommentCount(question.getId());\r\n\r\n                createNotification(comment.getCommentator(),question.getCreator(),commentator.getName(),question.getTitle(), NotificationTypeEnum.REPLY_QUESTION,question.getId(),question.getId());\r\n            }\r\n\r\n        }', 'java', 1610098749625, 1610098749625, 2, 98, 1, 1, 0, 1);
+INSERT INTO `question` VALUES (12, 'dsd', '`Notification notification = notificationMapper.selectById(id);\r\n        if (notification == null) {\r\n            throw new CustomizeException(\"无消息\");\r\n        }\r\n        if (notification.getReceiver() != (long) user.getId()) {\r\n            throw new CustomizeException(\"错误\");\r\n        }\r\n        notification.setStatus(NotificationStatusEnum.READ.getStatus());\r\n        notificationMapper.updateById(notification);\r\n        NotificationDto notificationDto = new NotificationDto();\r\n        BeanUtils.copyProperties(notification, notificationDto);\r\n        notificationDto.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));\r\n        return notificationDto;`', 'java', 1610099128801, 1610099128801, 2, 1, 0, 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for user
@@ -163,7 +251,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (2, 'Github', '59522523', '54b353d8-0869-47c2-a517-738762b1c16e', 1589089664276, 1610086583238, 'https://avatars2.githubusercontent.com/u/59522523?v=4');
+INSERT INTO `user` VALUES (2, 'Github', '59522523', 'fcaa86b1-ef94-4d49-bb95-69376d9ace4b', 1589089664276, 1610609556245, 'https://avatars2.githubusercontent.com/u/59522523?v=4');
 INSERT INTO `user` VALUES (3, 'ano', '65154691', 'a5eb956e-7146-4477-b230-5c5a8c1205b1', 1589181439845, 1589538893601, 'https://avatars3.githubusercontent.com/u/65154691?v=4');
 
 SET FOREIGN_KEY_CHECKS = 1;

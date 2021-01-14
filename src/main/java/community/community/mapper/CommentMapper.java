@@ -32,4 +32,6 @@ public interface CommentMapper {
     @Update("update comment set is_top=#{isTop},gmt_modifity=#{gmtModifity} where id=#{id} and status=0")
     void topComment(Comment comment);
 
+    @Update("update comment set dislike_count=#{dislikeCount},gmt_modifity=#{gmtModifity} where id=#{id} and status=0")
+    void updateDislikeCount(Comment comment);
 }

@@ -24,9 +24,11 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Integer id,
-                       Model model
+                       Model model,
+                       HttpServletRequest request
     ) {
-        QuestionDto question = questionService.getById(id);
+        User user = (User) request.getSession().getAttribute("user");
+        QuestionDto question = questionService.getById(id,user);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());

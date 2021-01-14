@@ -1,6 +1,7 @@
 package community.community.mapper;
 
 import community.community.model.Question;
+import community.community.model.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface QuestionMapper {
     @Update("update question set comment_count=comment_count+1 where id=#{id}")
     void updateCommentCount(@Param(value = "id") Integer id);
 
-    @Select("select id,title,tag from question where tag regexp #{tag} and id !=#{id} and status=0")
+    @Select("select id,title,tag from question where tag regexp #{tag} and id !=#{id} and status=0 limit 5")
     List<Question> selectRelatedQuestion(Question question);
 
     @Update("update question set status=#{status} where id=#{id}")
@@ -43,4 +44,13 @@ public interface QuestionMapper {
 
     @Update("update question set comment_count=comment_count-1 where id=#{id}")
     void decCommentCount(Question question);
+
+    @Select("select id,title,tag from question where  creator=#{id} and status=0 limit 5")
+    List<Question> findLeastQuestion(User user);
+
+    @Update("update question set collect_count=#{collectCount} where id=#{id} and status=0")
+    void updateCollectCount(Question question);
+
+    @Update("update question set like_count=#{likeCount} where id=#{id} and status=0")
+    void updateLikeCount(Question question);
 }
