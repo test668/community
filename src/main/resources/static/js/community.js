@@ -386,6 +386,28 @@ function likeQuestion(e) {
     });
 }
 
+function login() {
+
+}
+var countdown = 60;
+function setEmail(obj) {
+
+    if (countdown == 0) {
+        obj.removeAttribute("disabled");
+        obj.value = "获取验证码";
+        countdown = 60;
+        return;
+    } else {
+        obj.setAttribute("disabled", true);
+        obj.value = "重新发送(" + countdown + ")";
+        countdown--;
+    }
+    setTimeout(function () {
+        setEmail(obj)
+    },1000)
+
+}
+
 // function selectTopTag(e) {
 //     var id=$("#new");
 //     id.removeClass("well");

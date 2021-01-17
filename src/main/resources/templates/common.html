@@ -1,6 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
+<head>
+    <script src="/js/community.js" type="application/javascript"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
 <div th:fragment="copy">
 <nav class="navbar navbar-default">
@@ -39,12 +42,76 @@
                     </ul>
                 </li>
                 <li th:if="${session.user==null}">
-                    <a id="login-link" href="https://github.com/login/oauth/authorize?client_id=b246af4c3a29b7ebf7da&redirect_uri=http://localhost:8081/callback&scope=user&state=1">登录</a></li>
-
+                <a id="login-link" data-toggle="modal" href="#exampleModal" >登录</a></li>
             </ul>
         </div>
     </div>
 </nav>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin" action="/login" method="get">
+                        <h2>登录</h2>
+                        <div class="form-group">
+                        <label class="sr-only control-label" for="email">该邮箱未注册</label>
+                        <input type="text" class="form-control" placeholder="Email" required="" id="email">
+                        </div>
+                        <div class="form-group">
+                        <label class="sr-only control-label" for="password">密码错误</label>
+                        <input type="password" class="form-control " placeholder="Password" required="" id="password">
+                        </div>
+                        <div class="form-group">
+                                <button  class="btn btn-default btn-success" onclick="login()">提交</button>
+                            <span class="pull-right">
+                                <a data-toggle="modal" href="#exampleModa2" data-dismiss="modal">忘记密码？</a>or<a> 注册</a>
+                            </span>
+                        </div>
+                    </form>
+                    <h5 class="center-text">第三方账号登录</h5>
+                    <hr>
+                    <a class="iconfont icon-github center-icon" style='text-decoration:none;' href="https://github.com/login/oauth/authorize?client_id=b246af4c3a29b7ebf7da&redirect_uri=http://localhost:8081/callback&scope=user&state=1"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModa2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin" action="/login" method="get">
+                        <h3>找回密码</h3>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="email1">该邮箱未注册</label>
+                            <input type="text" class="form-control" placeholder="注册使用的邮箱" required="" id="email1">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="password1">密码错误</label>
+                            <input type="password" class="form-control " placeholder="新密码" required="" id="password1">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="idCode">验证码错误</label>
+                            <input type="password" class="form-control " placeholder="验证码" required="" id="idCode">
+                        </div>
+                        <div class="form-group">
+                            <button  class="btn btn-default btn-success" onclick="login()">提交</button>
+                            <span class="pull-right">
+                                <input id="send" type ="button" name="sm" value="获取验证码" onclick="setEmail(this)"/>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 </div>
+
 </body>
 </html>
