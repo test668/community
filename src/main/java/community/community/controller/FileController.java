@@ -1,7 +1,7 @@
 package community.community.controller;
 
 import community.community.dto.FileDto;
-import community.community.provider.FileProvide;
+import community.community.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class FileController {
 
     @Autowired
-    private FileProvide fileProvide;
+    private FileUtil fileUtil;
 
     @RequestMapping("/file/upload")
     @ResponseBody
@@ -23,16 +23,14 @@ public class FileController {
         MultipartHttpServletRequest multipartHttpRequest=(MultipartHttpServletRequest) request;
         MultipartFile file=multipartHttpRequest.getFile("editormd-image-file");
         try {
-            String myprovide = fileProvide.myprovide(file.getInputStream(), file.getOriginalFilename());
+            String fileUrl = fileUtil.getFileUrl(file.getInputStream(), file.getOriginalFilename());
             FileDto fileDto = new FileDto();
             fileDto.setSuccess(1);
-            fileDto.setUrl(myprovide);
+            fileDto.setUrl(fileUrl);
             return fileDto;
         }catch (Exception e){
             e.printStackTrace();
             return null;
         }
-
-
     }
 }

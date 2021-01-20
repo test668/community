@@ -2,8 +2,9 @@ package community.community.controller;
 
 import community.community.dto.Access_tokenDto;
 import community.community.dto.GithubUser;
+import community.community.enums.UserTypeEnum;
 import community.community.model.User;
-import community.community.provider.GithubProvider;
+import community.community.util.GithubUtil;
 import community.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
     @Autowired
-    private GithubProvider githubProvider;
+    private GithubUtil githubUtil;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -45,8 +46,8 @@ public class AuthorizeController {
         access_tokenDto.setCode(code);
         access_tokenDto.setRedirect_uri(RedirectUri);
         access_tokenDto.setState(state);
-        String accessToken = githubProvider.getAccessToken(access_tokenDto);
-        GithubUser githubUser = githubProvider.getUser(accessToken);
+        String accessToken = githubUtil.getAccessToken(access_tokenDto);
+        GithubUser githubUser = githubUtil.getUser(accessToken);
 
         if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
@@ -55,6 +56,7 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatar_url());
+            user.setType(UserTypeEnum.GITHUB_USER.getType());
             userService.createOrUpdate(user);
             response.addCookie(new Cookie("token", token));
             return "redirect:/";

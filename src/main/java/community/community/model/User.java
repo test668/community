@@ -11,4 +11,7 @@ public class User {
     private Long gmtCreate;
     private Long gmtModified;
     private String avatarUrl;
+    private String password;
+    private String email;
+    private Integer type;
 }

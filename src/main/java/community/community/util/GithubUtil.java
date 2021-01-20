@@ -1,4 +1,4 @@
-package community.community.provider;
+package community.community.util;
 
 import com.alibaba.fastjson.JSON;
 import community.community.dto.Access_tokenDto;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class GithubProvider {
+public class GithubUtil {
     public String getAccessToken(Access_tokenDto access_tokenDto) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
@@ -22,8 +22,8 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             String[] split = string.split("&");
-            String tokenstr = split[0];
-            String token = tokenstr.split("=")[1];
+            String tokenStr = split[0];
+            String token = tokenStr.split("=")[1];
             return token;
 
         } catch (Exception e) {

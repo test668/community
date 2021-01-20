@@ -386,12 +386,9 @@ function likeQuestion(e) {
     });
 }
 
-function login() {
-
-}
 var countdown = 60;
-function setEmail(obj) {
 
+function setTime(obj) {
     if (countdown == 0) {
         obj.removeAttribute("disabled");
         obj.value = "获取验证码";
@@ -403,9 +400,129 @@ function setEmail(obj) {
         countdown--;
     }
     setTimeout(function () {
-        setEmail(obj)
+        setTime(obj)
     },1000)
+}
+function setEmail(obj) {
+var email=$("#email1").val();
+if (obj.getAttribute("name") == "sm1") {
+    email=$("#email2").val();
+}
+if (!email){
+    alert("请输入邮箱");
+    return;
+}
+    $.ajax({
+        type: "POST",
+        url: "/register/sendEmail",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email": email
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                setTime(obj);
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
 
+function login() {
+    var email=$("#email").val();
+    if (!email) {
+        alert("请输入邮箱");
+        return;
+    }
+    var password=$("#password").val();
+    if (!password) {
+        alert("请输入密码");
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/login",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email":email,
+            "password":password
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                window.location.reload();
+                console.log(response);
+            } else if (response.code == 201) {
+                var emailDiv=document.getElementById("email-div");
+                emailDiv.classList.add("has-error");
+                var emailMsg=document.getElementById("email-msg");
+                emailMsg.classList.remove("sr-only");
+            }else if (response.code == 202) {
+                var pswDiv=document.getElementById("psw-div");
+                pswDiv.classList.add("has-error");
+                var pswMsg=document.getElementById("psw-msg");
+                pswMsg.classList.remove("sr-only");
+            }else{
+                console.log(response);
+            }
+        },
+        dataType: "json"
+    });
+}
+
+function password() {
+    var email=$("#email1").val();
+    var psw=$("#password1").val();
+    var verifyCode=$("#idCode").val();
+    var emailDiv=document.getElementById("email1-div");
+    var emailMsg=document.getElementById("email1-msg");
+    var pswDiv=document.getElementById("psw1-div");
+    var pswMsg=document.getElementById("psw1-msg");
+    var idcodeDiv=document.getElementById("idcode-div");
+    var idcodeMsg=document.getElementById("idcode-msg");
+    var idcodeMsg1=document.getElementById("idcode-msg1");
+    if (!email) {
+        alert("请输入邮箱");
+        return;
+    }
+    if (!psw) {
+        alert("请输入密码");
+        return;
+    }
+    if (psw.length<6||psw.length>18){
+        pswDiv.classList.add("has-error");
+        pswMsg.classList.remove("sr-only");
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/login/password",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email":email,
+            "password":psw,
+            "verifyCode":verifyCode
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                alert("修改成功，请重新登录");
+                console.log(response);
+            } else if (response.code == 203) {
+                emailDiv.classList.add("has-error");
+                emailMsg.classList.remove("sr-only");
+            }else if (response.code == 202) {
+                idcodeDiv.classList.add("has-error");
+                idcodeMsg.classList.remove("sr-only");
+            }else if (response.code == 201) {
+                idcodeDiv.classList.add("has-error");
+                idcodeMsg1.classList.remove("sr-only");
+                console.log(response);
+            }
+        },
+        dataType: "json"
+    });
 }
 
 // function selectTopTag(e) {

@@ -54,24 +54,24 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-signin" action="/login" method="get">
+                    <form class="form-signin" method="post" action="*">
                         <h2>登录</h2>
-                        <div class="form-group">
-                        <label class="sr-only control-label" for="email">该邮箱未注册</label>
+                        <div class="form-group" th:id="email-div">
+                        <label class="sr-only control-label" for="email" th:id="email-msg">该邮箱未注册</label>
                         <input type="text" class="form-control" placeholder="Email" required="" id="email">
                         </div>
-                        <div class="form-group">
-                        <label class="sr-only control-label" for="password">密码错误</label>
+                        <div class="form-group" th:id="psw-div">
+                        <label class="sr-only control-label" for="password" th:id="psw-msg">密码错误</label>
                         <input type="password" class="form-control " placeholder="Password" required="" id="password">
                         </div>
                         <div class="form-group">
-                                <button  class="btn btn-default btn-success" onclick="login()">提交</button>
+                                <button  class="btn btn-default btn-success" type="button" onclick="login()">提交</button>
                             <span class="pull-right">
-                                <a data-toggle="modal" href="#exampleModa2" data-dismiss="modal">忘记密码？</a>or<a> 注册</a>
+                                <a data-toggle="modal" href="#exampleModa2" data-dismiss="modal">忘记密码？</a>or<a data-toggle="modal" href="#exampleModa3" data-dismiss="modal"> 注册</a>
                             </span>
                         </div>
                     </form>
-                    <h5 class="center-text">第三方账号登录</h5>
+                    <h5 class="center-text">建议使用第三方账号登录</h5>
                     <hr>
                     <a class="iconfont icon-github center-icon" style='text-decoration:none;' href="https://github.com/login/oauth/authorize?client_id=b246af4c3a29b7ebf7da&redirect_uri=http://localhost:8081/callback&scope=user&state=1"></a>
                 </div>
@@ -85,24 +85,66 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-signin" action="/login" method="get">
+                    <form class="form-signin" method="post" action="*">
                         <h3>找回密码</h3>
-                        <div class="form-group">
-                            <label class="sr-only control-label" for="email1">该邮箱未注册</label>
+                        <div class="form-group" th:id="email1-div">
+                            <label class="sr-only control-label" for="email1" th:id="email1-msg">邮箱未注册</label>
                             <input type="text" class="form-control" placeholder="注册使用的邮箱" required="" id="email1">
                         </div>
-                        <div class="form-group">
-                            <label class="sr-only control-label" for="password1">密码错误</label>
-                            <input type="password" class="form-control " placeholder="新密码" required="" id="password1">
+                        <div class="form-group" th:id="psw1-div">
+                            <label class="sr-only control-label" for="password1" th:id="psw1-msg">密码长度为6-18位</label>
+                            <input type="password" class="form-control " placeholder="新密码（6-18）位" required="" id="password1">
                         </div>
-                        <div class="form-group">
-                            <label class="sr-only control-label" for="idCode">验证码错误</label>
-                            <input type="password" class="form-control " placeholder="验证码" required="" id="idCode">
+                        <div class="form-group" th:id="idcode-div">
+                            <label class="sr-only control-label" for="idCode" th:id="idcode-msg" >验证码错误</label>
+                            <label class="sr-only control-label" for="idCode" th:id="idcode-msg1" >验证码无效，请重新发送</label>
+                            <input type="password" class="form-control " placeholder="邮箱验证码" required="" id="idCode">
                         </div>
-                        <div class="form-group">
-                            <button  class="btn btn-default btn-success" onclick="login()">提交</button>
+                             <div class="form-group">
+                            <button  class="btn btn-default btn-success" type="button" onclick="password()">提交</button>
                             <span class="pull-right">
                                 <input id="send" type ="button" name="sm" value="获取验证码" onclick="setEmail(this)"/>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModa3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin form-horizontal" method="post" action="*">
+                        <h3>注册</h3>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="email2">邮箱非法</label>
+                            <input type="text" class="form-control" placeholder="邮箱" required="" id="email2">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="userName">用户名非法</label>
+                            <input type="text" class="form-control " placeholder="用户名（6-18个字符）" required="" id="userName">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="password2">密码非法</label>
+                            <input type="password" class="form-control " placeholder="密码（6-18个字符）" required="" id="password2">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile" class="sr-only control-label">请选择合法的头像</label>
+                            <p class="form-control-static">选择一个头像上传(.jpg,.img格式)：</p>
+                            <input type="file" id="exampleInputFile" required="">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only control-label" for="idCode2">验证码错误</label>
+                            <input type="password" class="form-control " placeholder="邮箱验证码" required="" id="idCode2">
+                        </div>
+                        <div class="form-group">
+                            <button  class="btn btn-default btn-success" type="button" >提交</button>
+                            <span class="pull-right">
+                                <input id="send2" type ="button" name="sm1" value="获取验证码" onclick="setEmail(this)"/>
                             </span>
                         </div>
                     </form>

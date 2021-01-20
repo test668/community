@@ -11,7 +11,7 @@ public class UserService {
     private UserMapper userMapper;
 
     public void createOrUpdate(User user) {
-        User dbUser=userMapper.findByAcoountId(user.getAccountId());
+        User dbUser=userMapper.findByAccountId(user.getAccountId());
         if (dbUser==null){
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
