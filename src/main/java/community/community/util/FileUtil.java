@@ -26,7 +26,7 @@ public class FileUtil {
         }
         try {
             //URL有效期，3600秒,此处需要修改
-            long expireSeconds = 3600L;
+            long expireSeconds = 3600*24*30L;
             TemporarySignatureRequest request = new TemporarySignatureRequest(HttpMethodEnum.GET, expireSeconds);
             request.setBucketName("my-community");
             request.setObjectKey(generatedFileName);

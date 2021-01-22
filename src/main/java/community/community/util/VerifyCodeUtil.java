@@ -69,13 +69,9 @@ public class VerifyCodeUtil {
         //以下为发送邮件部分
         MimeMessage mimeMessage = null;
         MimeMessageHelper helper = null;
-
-        //发送复杂的邮件
         try {
             mimeMessage = mailSender.createMimeMessage();
-            //组装
             helper= new MimeMessageHelper(mimeMessage, true);
-            //邮件标题
             helper.setSubject("注册账号验证码");
             //后面的ture为支持识别html标签
             helper.setText("<h3>\n" +

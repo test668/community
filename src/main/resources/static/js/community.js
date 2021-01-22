@@ -433,6 +433,10 @@ if (!email){
 
 function login() {
     var email=$("#email").val();
+    var emailDiv=document.getElementById("email-div");
+    var emailMsg=document.getElementById("email-msg");
+    var pswDiv=document.getElementById("psw-div");
+    var pswMsg=document.getElementById("psw-msg");
     if (!email) {
         alert("请输入邮箱");
         return;
@@ -455,18 +459,19 @@ function login() {
                 window.location.reload();
                 console.log(response);
             } else if (response.code == 201) {
-                var emailDiv=document.getElementById("email-div");
                 emailDiv.classList.add("has-error");
-                var emailMsg=document.getElementById("email-msg");
                 emailMsg.classList.remove("sr-only");
+                pswDiv.classList.remove("has-error");
+                pswMsg.classList.add("sr-only");
             }else if (response.code == 202) {
-                var pswDiv=document.getElementById("psw-div");
+                emailDiv.classList.remove("has-error");
+                emailMsg.classList.add("sr-only");
                 pswDiv.classList.add("has-error");
-                var pswMsg=document.getElementById("psw-msg");
                 pswMsg.classList.remove("sr-only");
             }else{
-                console.log(response);
+                alert(response.message);
             }
+            console.log(response);
         },
         dataType: "json"
     });
@@ -512,14 +517,215 @@ function password() {
             } else if (response.code == 203) {
                 emailDiv.classList.add("has-error");
                 emailMsg.classList.remove("sr-only");
+                idcodeDiv.classList.remove("has-error");
+                idcodeMsg.classList.add("sr-only");
+                idcodeMsg1.classList.add("sr-only");
             }else if (response.code == 202) {
                 idcodeDiv.classList.add("has-error");
                 idcodeMsg.classList.remove("sr-only");
+                idcodeMsg1.classList.add("sr-only");
+                emailDiv.classList.remove("has-error");
+                emailMsg.classList.add("sr-only");
             }else if (response.code == 201) {
                 idcodeDiv.classList.add("has-error");
                 idcodeMsg1.classList.remove("sr-only");
-                console.log(response);
+                idcodeMsg.classList.add("sr-only");
+                emailDiv.classList.remove("has-error");
+                emailMsg.classList.add("sr-only");
+            }else {
+                alert(response.message);
             }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+
+function uploadFile() {
+    var emailDiv=document.getElementById("email2-div");
+    var emailMsg1=document.getElementById("email2-msg1");
+    var emailMsg2=document.getElementById("email2-msg2");
+    var usernameDiv=document.getElementById("username-div");
+    var usernameMsg=document.getElementById("username-msg");
+    var pswDiv=document.getElementById("psw2-div");
+    var pswMsg=document.getElementById("psw2-msg");
+    var idcodeDiv=document.getElementById("idcode2-div");
+    var idcodeMsg1=document.getElementById("idcode2-msg1");
+    var idcodeMsg2=document.getElementById("idcode2-msg2");
+    var file=$("#file").val();
+    var fileDiv=document.getElementById("file-div");
+    var fileMsg=document.getElementById("file-msg");
+    if (!file){
+        alert("请上传文件");
+        return;
+    }
+    var fileName1 = file.substring(file.lastIndexOf(".") + 1).toLowerCase();
+    var size = $("input[name='fileName']")[0].files[0].size;
+    if((fileName1 != "jpg" && fileName1 !="img"&&fileName1!="png")||size>10485760){
+        fileDiv.classList.add("has-error");
+        fileMsg.classList.remove("sr-only");
+        emailDiv.classList.remove("has-error");
+        emailMsg1.classList.add("sr-only");
+        emailMsg2.classList.add("sr-only");
+        usernameDiv.classList.remove("has-error");
+        usernameMsg.classList.add("sr-only");
+        pswDiv.classList.remove("has-error");
+        pswMsg.classList.add("sr-only");
+        idcodeDiv.classList.remove("has-error");
+        idcodeMsg1.classList.add("sr-only");
+        idcodeMsg2.classList.add("sr-only");
+        return false;
+    }
+    var formData = new FormData();
+    formData.append("file",$("#file")[0].files[0]);
+    var avatarUrl='';
+    var imgUrl=$("#imgUrl");
+    $.ajax({
+        type : "post",
+        url : "/register/uploadFile",
+        data : formData,
+        processData : false,
+        contentType : false,
+        success : function(data){
+            if (data){
+                avatarUrl=data;
+                alert("上传成功");
+                $("#avatarUrl").val(avatarUrl);
+                imgUrl.attr("src",avatarUrl);
+            }else {
+                alert("上传失败");
+            }
+        }
+    });
+
+}
+
+function register() {
+    var email=$("#email2").val();
+    var username=$("#userName").val();
+    var psw=$("#password2").val();
+    var verifyCode=$("#idCode2").val();
+    var emailDiv=document.getElementById("email2-div");
+    var emailMsg1=document.getElementById("email2-msg1");
+    var emailMsg2=document.getElementById("email2-msg2");
+    var usernameDiv=document.getElementById("username-div");
+    var usernameMsg=document.getElementById("username-msg");
+    var pswDiv=document.getElementById("psw2-div");
+    var pswMsg=document.getElementById("psw2-msg");
+    var idcodeDiv=document.getElementById("idcode2-div");
+    var idcodeMsg1=document.getElementById("idcode2-msg1");
+    var idcodeMsg2=document.getElementById("idcode2-msg2");
+    var fileDiv=document.getElementById("file-div");
+    var fileMsg=document.getElementById("file-msg");
+    var avatarUrl=$("#avatarUrl").val();
+    if (!email) {
+        alert("请输入邮箱");
+        return;
+    }
+    if (!username) {
+        alert("请输入用户名");
+        return;
+    }
+    if (!psw) {
+        alert("请输入密码");
+        return;
+    }
+    if (!avatarUrl){
+        alert("请上传文件");
+        return;
+    }
+    if (!verifyCode) {
+        alert("请输入验证码");
+        return;
+    }
+    if (username.length < 6 || username.length > 18) {
+        fileDiv.classList.remove("has-error");
+        fileMsg.classList.add("sr-only");
+        emailDiv.classList.remove("has-error");
+        emailMsg1.classList.add("sr-only");
+        emailMsg2.classList.add("sr-only");
+        usernameDiv.classList.add("has-error");
+        usernameMsg.classList.remove("sr-only");
+        pswDiv.classList.remove("has-error");
+        pswMsg.classList.add("sr-only");
+        idcodeDiv.classList.remove("has-error");
+        idcodeMsg1.classList.add("sr-only");
+        idcodeMsg2.classList.add("sr-only");
+        return ;
+    }
+    if (psw.length < 6 || psw.length > 18) {
+        fileDiv.classList.remove("has-error");
+        fileMsg.classList.add("sr-only");
+        emailDiv.classList.remove("has-error");
+        emailMsg1.classList.add("sr-only");
+        emailMsg2.classList.add("sr-only");
+        usernameDiv.classList.remove("has-error");
+        usernameMsg.classList.add("sr-only");
+        pswDiv.classList.add("has-error");
+        pswMsg.classList.remove("sr-only");
+        idcodeDiv.classList.remove("has-error");
+        idcodeMsg1.classList.add("sr-only");
+        idcodeMsg2.classList.add("sr-only");
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/register",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email":email,
+            "password":psw,
+            "verifyCode":verifyCode,
+            "name":username,
+            "avatarUrl":avatarUrl
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                window.location.reload();
+                console.log(response);
+            } else if (response.code == 203) {
+                fileDiv.classList.remove("has-error");
+                fileMsg.classList.add("sr-only");
+                emailDiv.classList.add("has-error");
+                emailMsg1.classList.remove("sr-only");
+                emailMsg2.classList.add("sr-only");
+                usernameDiv.classList.remove("has-error");
+                usernameMsg.classList.add("sr-only");
+                pswDiv.classList.remove("has-error");
+                pswMsg.classList.add("sr-only");
+                idcodeDiv.classList.remove("has-error");
+                idcodeMsg1.classList.add("sr-only");
+                idcodeMsg2.classList.add("sr-only");
+            }else if (response.code == 202) {
+                fileDiv.classList.remove("has-error");
+                fileMsg.classList.add("sr-only");
+                emailDiv.classList.remove("has-error");
+                emailMsg1.classList.add("sr-only");
+                emailMsg2.classList.add("sr-only");
+                usernameDiv.classList.remove("has-error");
+                usernameMsg.classList.add("sr-only");
+                pswDiv.classList.remove("has-error");
+                pswMsg.classList.add("sr-only");
+                idcodeDiv.classList.add("has-error");
+                idcodeMsg1.classList.remove("sr-only");
+                idcodeMsg2.classList.add("sr-only");
+            }else if (response.code == 201) {
+                fileDiv.classList.remove("has-error");
+                fileMsg.classList.add("sr-only");
+                emailDiv.classList.remove("has-error");
+                emailMsg1.classList.add("sr-only");
+                emailMsg2.classList.add("sr-only");
+                usernameDiv.classList.remove("has-error");
+                usernameMsg.classList.add("sr-only");
+                pswDiv.classList.remove("has-error");
+                pswMsg.classList.add("sr-only");
+                idcodeDiv.classList.add("has-error");
+                idcodeMsg1.classList.add("sr-only");
+                idcodeMsg2.classList.remove("sr-only");
+            }else {
+                alert(response.message);
+            }
+            console.log(response);
         },
         dataType: "json"
     });

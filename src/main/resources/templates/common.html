@@ -19,9 +19,9 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left" action="/" method="get">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="search" placeholder="搜索问题">
+                    <input type="text" class="form-control" name="search" placeholder="搜索问题" autoComplete="off">
                 </div>
-                <button type="submit" class="btn btn-default">搜索</button>
+                <button type="submit" class="btn btn-default" >搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user!=null}">
@@ -33,8 +33,10 @@
                 </a></li>
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
-                        <span th:text="${session.user.getName()}"></span>
-                        <span class="caret"></span></a>
+                        <span>
+                        <img class="media-photo img-circle" th:src="${session.user.getAvatarUrl()}">
+                        </span>
+                        </a>
                     <ul class="dropdown-menu">
 
                         <li><a href="/profile/questions">我的问题</a></li>
@@ -58,7 +60,7 @@
                         <h2>登录</h2>
                         <div class="form-group" th:id="email-div">
                         <label class="sr-only control-label" for="email" th:id="email-msg">该邮箱未注册</label>
-                        <input type="text" class="form-control" placeholder="Email" required="" id="email">
+                        <input type="text" class="form-control" placeholder="Email" required="" id="email" autoComplete="off">
                         </div>
                         <div class="form-group" th:id="psw-div">
                         <label class="sr-only control-label" for="password" th:id="psw-msg">密码错误</label>
@@ -98,7 +100,7 @@
                         <div class="form-group" th:id="idcode-div">
                             <label class="sr-only control-label" for="idCode" th:id="idcode-msg" >验证码错误</label>
                             <label class="sr-only control-label" for="idCode" th:id="idcode-msg1" >验证码无效，请重新发送</label>
-                            <input type="password" class="form-control " placeholder="邮箱验证码" required="" id="idCode">
+                            <input type="text" class="form-control " placeholder="邮箱验证码" required="" id="idCode">
                         </div>
                              <div class="form-group">
                             <button  class="btn btn-default btn-success" type="button" onclick="password()">提交</button>
@@ -120,29 +122,37 @@
                 <div class="modal-body">
                     <form class="form-signin form-horizontal" method="post" action="*">
                         <h3>注册</h3>
-                        <div class="form-group">
-                            <label class="sr-only control-label" for="email2">邮箱非法</label>
+                        <div class="form-group" th:id="email2-div">
+                            <label class="sr-only control-label" for="email2" th:id="email2-msg1">该邮箱已注册</label>
+                            <label class="sr-only control-label" for="email2" th:id="email2-msg2">邮箱非法</label>
                             <input type="text" class="form-control" placeholder="邮箱" required="" id="email2">
                         </div>
-                        <div class="form-group">
-                            <label class="sr-only control-label" for="userName">用户名非法</label>
+                        <div class="form-group" th:id="username-div">
+                            <label class="sr-only control-label" for="userName" th:id="username-msg">用户名非法</label>
                             <input type="text" class="form-control " placeholder="用户名（6-18个字符）" required="" id="userName">
                         </div>
-                        <div class="form-group">
-                            <label class="sr-only control-label" for="password2">密码非法</label>
+                        <div class="form-group" th:id="psw2-div">
+                            <label class="sr-only control-label" for="password2" th:id="psw2-msg">密码非法</label>
                             <input type="password" class="form-control " placeholder="密码（6-18个字符）" required="" id="password2">
                         </div>
-                        <div class="form-group">
-                            <label for="exampleInputFile" class="sr-only control-label">请选择合法的头像</label>
-                            <p class="form-control-static">选择一个头像上传(.jpg,.img格式)：</p>
-                            <input type="file" id="exampleInputFile" required="">
+                        <div class="form-group" th:id="file-div">
+                            <label for="file" class="sr-only control-label" th:id="file-msg">请选择合法的头像</label>
+                            <p class="form-control-static">选择一个头像上传(.jpg,.img,.png格式,10M以内大小)：</p>
+                            <input type="file" id="file" required="" name="fileName">
+                            <input type="text" hidden="hidden" th:id="avatarUrl">
+                            <label>预览效果：</label>
+                            <img class="media-object img-rounded " th:id="imgUrl">
+                            <span class="pull-right">
+                                <input id="upload" type ="button"  value="上传" onclick="uploadFile()"/>
+                            </span>
+                        </div>
+                        <div class="form-group" th:id="idcode2-div">
+                            <label class="sr-only control-label" for="idCode2" th:id="idcode2-msg1">验证码错误</label>
+                            <label class="sr-only control-label" for="idCode2" th:id="idcode2-msg2">验证码已失效，请重新发送</label>
+                            <input type="text" class="form-control " placeholder="邮箱验证码" required="" id="idCode2">
                         </div>
                         <div class="form-group">
-                            <label class="sr-only control-label" for="idCode2">验证码错误</label>
-                            <input type="password" class="form-control " placeholder="邮箱验证码" required="" id="idCode2">
-                        </div>
-                        <div class="form-group">
-                            <button  class="btn btn-default btn-success" type="button" >提交</button>
+                            <button  class="btn btn-default btn-success" type="button" onclick="register()">提交</button>
                             <span class="pull-right">
                                 <input id="send2" type ="button" name="sm1" value="获取验证码" onclick="setEmail(this)"/>
                             </span>

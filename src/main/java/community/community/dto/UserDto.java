@@ -3,6 +3,8 @@ package community.community.dto;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+
 /**
  * @Author by wyc
  * @Date 2021/1/19.
@@ -13,7 +15,6 @@ public class UserDto {
     private String email;
     private String name;
     private String password;
-    private MultipartFile file;
     private String avatarUrl;
     private String accountId;
     private String token;

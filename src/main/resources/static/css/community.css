@@ -3,15 +3,23 @@ body{
 }
 .main{
     background-color: white;
-    margin: 60px;
+    margin: 60px 460px 60px 60px;
+
 }
 .btn-publish{
     float: right;
     margin-bottom: 15px;
 }
+.h2-center{
+    margin-left: 120px;
+}
 .media-object{
     width: 40px;
     height: 40px;
+}
+.media-photo{
+    width: 27px;
+    height: 27px;
 }
 .media-author{
     width: 30px;
