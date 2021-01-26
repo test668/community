@@ -36,7 +36,7 @@ public class ProfileController {
         }
         if ("questions".equals(action)){
             model.addAttribute("section","questions");
-            model.addAttribute("sectionName","我提问的问题");
+            model.addAttribute("sectionName","我的帖子");
             PaginationDto paginationDto = questionService.List(user.getId(), page, size);
             if (paginationDto==null){
                 //以后再来补充。。。

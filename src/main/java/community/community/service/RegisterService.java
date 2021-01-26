@@ -2,8 +2,10 @@ package community.community.service;
 
 import community.community.dto.ResultDto;
 import community.community.dto.UserDto;
+import community.community.mapper.UserDataMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.User;
+import community.community.model.UserData;
 import community.community.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class RegisterService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserDataMapper userDataMapper;
+
 
     public ResultDto registerUser(UserDto userDto) {
         User user = userMapper.findUserByEmail(userDto);
@@ -32,6 +37,10 @@ public class RegisterService {
             User userRegister=new User();
             BeanUtils.copyProperties(userDto,userRegister);
             userMapper.insertLocalUser(userRegister);
+            UserData userData=new UserData();
+            user=userMapper.findUserByEmail(userDto);
+            userData.setUserId(user.getId());
+            userDataMapper.insert(userData);
             return ResultDto.ok0f();
         } catch (Exception e) {
             e.printStackTrace();

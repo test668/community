@@ -27,11 +27,11 @@
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h2><span th:text="${question.title}"></span></h2>
+                <h3><span th:text="${question.title}"></span></h3>
                 <span class="text-desc">
-                       浏览数：<span th:text="${question.viewCount}"></span>&nbsp;|
+                       作者：<span th:text="${question.user.name}"></span> &nbsp;|
                        发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>&nbsp;|
-                       作者：<span th:text="${question.user.name}"></span>
+                       阅读数：<span th:text="${question.viewCount}"></span>
                     </span>
 
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -91,17 +91,11 @@
 
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h3 class="text-center">
-                    <span th:text="${question.commentCount}"></span>个回复
-                </h3>
+                <h4 class="text-center">
+                    讨论数量：<span th:text="${question.commentCount}"></span>
+                </h4>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-s">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-t" th:each="comment : ${comments}">
-                    <div class="pull-left media-author">
-                        <a th:if="${comment.commentator==question.creator}">
-                            <img class="media-author"
-                                 th:src="${'/images/author.png'}">
-                        </a>
-                    </div>
                     <div class="pull-right media-author">
                         <a th:if="${comment.isTop==1}">
                             <img class="media-author"
@@ -125,15 +119,16 @@
                         </ul>
                     </div>
                     <div class="media">
-                        <div class="media-left">
+                            <div class="media-left">
                             <a href="#">
                                 <img class="media-object img-rounded"
                                      th:src="${comment.user.avatarUrl}">
                             </a>
-                        </div>
+                            </div>
                         <div class="media-body">
                             <h4 class="media-heading">
                                 <span th:text="${comment.user.name}"></span>
+                                <span th:if="${comment.commentator==question.creator}" class="media-heading iconfont icon-zuozhe"></span>
                             </h4>
                             <div><p th:text="${comment.content}"></p></div>
                             <div class="menu">
@@ -196,13 +191,13 @@
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h3>
-                    我的回复
-                </h3>
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section">
+                    <h4 class="text-center" th:if="${session.user==null}">
+                        回复请先<a data-toggle="modal" href="#exampleModal" >登录</a>
+                    </h4>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section" th:if="${session.user!=null}">
                         <div class="media">
                             <div class="media-left">
                                 <a href="#">
@@ -227,7 +222,7 @@
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>发布者</h4>
+                <h4>发帖者</h4>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -239,8 +234,31 @@
                         <h4 class="media-heading">
                             <span th:text="${question.user.name}"></span>
                         </h4>
-                        </span>
+                        <h6 class="media-heading" th:if="${question.userData.userBio!=null}">
+                            <span th:text="${question.userData.userBio}"></span>
+                        </h6>
+                        <h6 class="media-heading" th:if="${question.userData.userBio==null}">暂未填写</h6>
                     </div>
+                </div>
+                <div class="media">
+                    <dl class="text-center" style="float:left;margin-left: 20px;">
+                        <dt>
+                            <span th:text="${question.userData.userQuestionCount}"></span>
+                        </dt>
+                        <dd >发帖数</dd>
+                    </dl>
+                    <dl class="text-center" style="float:left;margin-left: 70px;">
+                        <dt>
+                            <span th:text="${question.userData.userCollectCount}"></span>
+                        </dt>
+                        <dd >收藏数</dd>
+                    </dl>
+                    <dl class="text-center" style="float:left;margin-left: 70px;">
+                        <dt>
+                            <span th:text="${question.userData.userQuestionLikeCount}"></span>
+                        </dt>
+                        <dd >获赞数</dd>
+                    </dl>
                 </div>
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

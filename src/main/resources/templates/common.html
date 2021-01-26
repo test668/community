@@ -8,7 +8,6 @@
 <div th:fragment="copy">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">my community</span>
@@ -28,8 +27,8 @@
                     <a href="/publish">发帖</a>
                 </li>
                 <li th:if="${session.user!=null}"><a href="/profile/replies">
-                    <span class="iconfont icon-tongzhi"></span>
-                    <span class="badge" th:if="${session.unreadCount!=0}" th:text="${session.unreadCount}"></span>
+                    <span class="iconfont icon-tongzhi" th:if="${session.unreadCount==0}"></span>
+                    <span class="iconfont icon-weidu" th:if="${session.unreadCount!=0}" ></span>
                 </a></li>
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
@@ -39,7 +38,7 @@
                         </a>
                     <ul class="dropdown-menu">
 
-                        <li><a href="/profile/questions">我的问题</a></li>
+                        <li><a href="/profile/questions">个人中心</a></li>
                         <li><a href="/logout">退出登录</a></li>
                     </ul>
                 </li>
@@ -75,7 +74,7 @@
                     </form>
                     <h5 class="center-text">建议使用第三方账号登录</h5>
                     <hr>
-                    <a class="iconfont icon-github center-icon" style='text-decoration:none;' href="https://github.com/login/oauth/authorize?client_id=b246af4c3a29b7ebf7da&redirect_uri=http://localhost:8081/callback&scope=user&state=1"></a>
+                    <a class=" iconfont icon-github center-icon" style='text-decoration:none;' href="https://github.com/login/oauth/authorize?client_id=b246af4c3a29b7ebf7da&redirect_uri=http://localhost:8081/callback&scope=user&state=1"></a>
                 </div>
             </div>
         </div>

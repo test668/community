@@ -1,6 +1,7 @@
 package community.community.dto;
 
 import community.community.model.User;
+import community.community.model.UserData;
 import lombok.Data;
 
 @Data
@@ -20,4 +21,5 @@ public class QuestionDto {
     private Integer status;
     private Integer collectStatus;
     private Integer collectCount;
+    private UserData userData;
 }

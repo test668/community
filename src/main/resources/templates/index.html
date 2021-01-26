@@ -20,7 +20,7 @@
 <div th:insert="~{common :: copy}"></div>
 <div class="container-fluid main">
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="iconfont icon-ai-home" aria-hidden="true"></span>首页</h3>
             <span>
             <a th:href="@{/(type=1)}" class="top-tag"   th:if="${type!='1'}">最新</a>
@@ -30,7 +30,7 @@
             </span>
             <hr>
             <div class="media" th:each="question : ${pagination.data}" th:id="data-body">
-                <div class="media-left picture">
+                <div class="media-left picture" >
                     <a href="#">
                         <img class="media-object img-rounded"
                              th:src="${question.user.avatarUrl}">
@@ -43,7 +43,7 @@
                         <a th:text="${question.title}" th:href="@{'/question/'+${question.id}}"></a>
                     </p>
                     <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复
-                        <span th:text="${question.viewCount}"></span>人浏览
+                        <span th:text="${question.viewCount}"></span>次浏览
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
 
                     </span>
@@ -80,16 +80,14 @@
                     </li>
                 </ul>
             </nav>
-
-
-
         </div>
 
-<!--        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">-->
-<!--            <h3>热门话题</h3>-->
-<!--        </div>-->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>热门话题</h3>
+        </div>
     </div>
 </div>
+
 <div th:insert="~{footer :: foot}"></div>
 </body>
 </html>

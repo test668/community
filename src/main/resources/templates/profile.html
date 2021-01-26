@@ -70,7 +70,7 @@
                             <span th:text="${notification.notifierName+''+notification.typeName+''}"></span>
                             <a th:text="${notification.outerTitle}"
                                th:href="@{'/notification/'+${notification.id}}"></a>
-                            <span class="label label-danger" th:if="${notification.status == 0}">未读</span>
+                            <span class="iconfont icon-weidu1 " style="font-size: 30px" th:if="${notification.status == 0}"></span>
                         </p>
                     </div>
                 </div>

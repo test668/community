@@ -5,14 +5,8 @@ import community.community.dto.PaginationDto;
 import community.community.dto.QuestionDto;
 import community.community.enums.NotificationTypeEnum;
 import community.community.exception.CustomizeException;
-import community.community.mapper.CollectUserQuestionMapper;
-import community.community.mapper.LikeUserQuestionMapper;
-import community.community.mapper.QuestionMapper;
-import community.community.mapper.UserMapper;
-import community.community.model.CollectUserQuestion;
-import community.community.model.LikeUserQuestion;
-import community.community.model.Question;
-import community.community.model.User;
+import community.community.mapper.*;
+import community.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +31,9 @@ public class QuestionService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private UserDataMapper userDataMapper;
 
     public PaginationDto List(String search, Integer page, Integer size,String type) {
         if (!(StringUtils.isNullOrEmpty(search))) {
@@ -164,6 +161,10 @@ public class QuestionService {
         }
         User user1 = userMapper.findById(question.getCreator());
         questionDto.setUser(user1);
+        UserData userData=new UserData();
+        userData.setUserId(question.getCreator());
+        UserData userData1=userDataMapper.findByUserId(userData);
+        questionDto.setUserData(userData1);
         return questionDto;
     }
 
@@ -176,6 +177,9 @@ public class QuestionService {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModifity(question.getGmtCreate());
             questionMapper.create(question);
+            UserData userData=new UserData();
+            userData.setUserId(question.getCreator());
+            userDataMapper.incUserQuestionCount(userData);
         } else {
             question.setGmtModifity(System.currentTimeMillis());
             questionMapper.update(question);
@@ -208,6 +212,10 @@ public class QuestionService {
     }
 
     public void deleteQuestion(Question question) {
+        Question question1 = questionMapper.getById(question.getId());
+        UserData userData=new UserData();
+        userData.setUserId(question1.getCreator());
+        userDataMapper.decUserQuestionCount(userData);
         questionMapper.deleteQuestion(question);
     }
 
@@ -243,6 +251,13 @@ public class QuestionService {
         question.setId(questionDto.getId());
         question.setCollectCount(questionDto.getCollectCount());
         questionMapper.updateCollectCount(question);
+        UserData userData=new UserData();
+        userData.setUserId(questionDto.getUser().getId());
+        if (questionDto.getCollectStatus()==0){
+            userDataMapper.decUserCollectCount(userData);
+        }else {
+            userDataMapper.incUserCollectCount(userData);
+        }
     }
 
     public PaginationDto collectQuestionList(Integer userId, Integer page, Integer size) {
@@ -314,6 +329,7 @@ public class QuestionService {
         question.setGmtModifity(System.currentTimeMillis());
         questionMapper.updateLikeCount(question);
 
+        //发送通知
         Question questionById=questionMapper.getById(question.getId());
         String notifierName=questionDto.getUser().getName();
         String outerTitle = null;
@@ -329,6 +345,13 @@ public class QuestionService {
             notificationService.deleteNotification(likeUserQuestion.getLikeUserId(), questionById.getCreator(), NotificationTypeEnum.LIKE_QUESTION, questionById.getId());
         }
 
-
+        //更新点赞总数表
+        UserData userData=new UserData();
+        userData.setUserId(questionById.getCreator());
+        if (questionDto.getLikeStatus()==0){
+            userDataMapper.decUserQuestionLikeCount(userData);
+        }else {
+            userDataMapper.incUserQuestionLikeCount(userData);
+        }
     }
 }

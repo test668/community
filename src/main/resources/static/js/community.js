@@ -731,6 +731,69 @@ function register() {
     });
 }
 
+$(document).ready(function(e) {
+    $("#file1").change(function(e) {
+        var file=$("#file1").val();
+        if (!file){
+            alert("请上传文件");
+            return;
+        }
+        var fileName1 = file.substring(file.lastIndexOf(".") + 1).toLowerCase();
+        var size = $("input[name='fileName1']")[0].files[0].size;
+        if((fileName1 != "jpg" && fileName1 !="img"&&fileName1!="png")||size>10485760){
+            alert("请上传格式正确的头像");
+            return false;
+        }
+        var formData = new FormData();
+        formData.append("file",$("#file1")[0].files[0]);
+        var avatarUrl='';
+        var imgUrl=$("#imgUrl1");
+        $.ajax({
+            type : "post",
+            url : "/register/uploadFile",
+            data : formData,
+            processData : false,
+            contentType : false,
+            success : function(data){
+                if (data){
+                    avatarUrl=data;
+                    $("#avatarUrl1").val(avatarUrl);
+                    imgUrl.attr("src",avatarUrl);
+                }else {
+                    alert("上传失败");
+                }
+            }
+        });
+        alert("change事件触发");
+    });
+});
+
+function saveUserData(){
+    var name=$("#dataName").val();
+    var avatarUrl=$("#avatarUrl1").val();
+    var sex=$("input[name='sexOptions']:checked").val();
+    var userBio=$("#bio").val();
+    $.ajax({
+        type: "POST",
+        url: "/profileSetting/data",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "name": name,
+            "avatarUrl": avatarUrl,
+            "sex": sex,
+            "userBio": userBio
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                window.location.reload();
+            } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
 // function selectTopTag(e) {
 //     var id=$("#new");
 //     id.removeClass("well");

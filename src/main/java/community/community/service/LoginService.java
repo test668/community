@@ -5,6 +5,7 @@ import community.community.mapper.LoginBlackListMapper;
 import community.community.mapper.UserMapper;
 import community.community.model.LoginBlackList;
 import community.community.model.User;
+import community.community.model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -3,8 +3,11 @@ body{
 }
 .main{
     background-color: white;
-    margin: 60px 460px 60px 60px;
-
+    margin: 60px;
+}
+.main-profileSetting{
+    background-color: white;
+    margin: 60px 200px 200px 200px;
 }
 .btn-publish{
     float: right;
@@ -115,7 +118,9 @@ body{
 
 .center-icon{
     margin-left: 240px;
+    font-size: 47px!important;
 }
+
 .center-text{
     margin-left: 200px;
 }
