@@ -1,7 +1,6 @@
 package community.community.dto;
 
-import community.community.model.User;
-import community.community.model.UserData;
+
 import lombok.Data;
 
 /**
@@ -10,6 +9,14 @@ import lombok.Data;
  */
 @Data
 public class UserDataDto {
-    private UserData userData;
-    private User user;
+    private Integer id;
+    private Integer userId;
+    private Integer userQuestionLikeCount;
+    private Integer userQuestionCount;
+    private String userBio;
+    private Integer userCollectCount;
+    private Integer sex;
+    private String name;
+    private String avatarUrl;
+    private String email;
 }

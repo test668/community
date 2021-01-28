@@ -45,7 +45,9 @@ public class LoginController {
         user.setPassword(userDto.getPassword());
         ResultDto resultDto=loginService.verify(user);
         if (resultDto.getCode()==200){
-            response.addCookie(new Cookie("token", token));
+            Cookie cookie=new Cookie("token",token);
+            cookie.setMaxAge(60*60*24);
+            response.addCookie(cookie);
         }
         return resultDto;
     }

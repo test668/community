@@ -36,4 +36,7 @@ public interface UserDataMapper {
 
     @Update("update user_data set user_collect_count=user_collect_count-1 where user_id=#{userId}")
     void decUserCollectCount(UserData userData);
+
+    @Update("update user_data set user_bio=#{userBio},sex=#{sex} where user_id=#{userId}")
+    void updateData(UserData userData);
 }

@@ -53,28 +53,28 @@
                 <div class="form-group">
                     <label for="tag">添加标签</label>
                     <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
-                           placeholder="输入标签,以逗号隔开" autocomplete="off" onclick="showSelectTag()">
-                    <div id="select-tag" class="publish-tag-tab">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
-                                                                      data-toggle="tab">开发语言</a></li>
-                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"
-                                                       data-toggle="tab">相关框架</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="home">
-                                <span class="label label-info ">
-                            <span class="glyphicon glyphicon-tags" onclick="selectTag('java')">java</span>
-                                 </span>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="profile">
-                                <span class="label label-info ">
-                            <span class="glyphicon glyphicon-tags" onclick="selectTag('spring')">spring</span>
-                                </span>
-                            </div>
-                        </div>
+                           placeholder="输入标签,以逗号隔开" autocomplete="off" >
+<!--                    <div id="select-tag" class="publish-tag-tab">-->
+<!--                        <ul class="nav nav-tabs" role="tablist">-->
+<!--                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"-->
+<!--                                                                      data-toggle="tab">开发语言</a></li>-->
+<!--                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"-->
+<!--                                                       data-toggle="tab">相关框架</a></li>-->
+<!--                        </ul>-->
+<!--                        <div class="tab-content">-->
+<!--                            <div role="tabpanel" class="tab-pane active" id="home">-->
+<!--                                <span class="label label-info ">-->
+<!--                            <span class="glyphicon glyphicon-tags" onclick="selectTag('java')">java</span>-->
+<!--                                 </span>-->
+<!--                            </div>-->
+<!--                            <div role="tabpanel" class="tab-pane" id="profile">-->
+<!--                                <span class="label label-info ">-->
+<!--                            <span class="glyphicon glyphicon-tags" onclick="selectTag('spring')">spring</span>-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
-                    </div>
+<!--                    </div>-->
                 </div>
 <!--                <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">-->
 <!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->

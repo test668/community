@@ -40,14 +40,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">邮箱</label>
                                     <div class="col-sm-10">
-                                        <p class="form-control-static" th:text="${userDataDto.user.email}"></p>
+                                        <p class="form-control-static" th:text="${userDataDto.email}"></p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="dataName" class="col-sm-2 control-label">用户名</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="dataName" placeholder="用户名"
-                                               style="width: 20%" th:value="${userDataDto.user.name}">
+                                               style="width: 20%" th:value="${userDataDto.name}">
                                     </div>
                                 </div>
 
@@ -57,10 +57,10 @@
                                         <a href="#">
                                             <img class="media-object img-circle" th:id="imgUrl1"
                                                  style="margin-top: 10px;width: 80px;height: 80px"
-                                                 th:src="${userDataDto.user.avatarUrl!=null ? userDataDto.user.avatarUrl: '/images/avatar.png'}">
+                                                 th:src="${userDataDto.avatarUrl!=null ? userDataDto.avatarUrl: '/images/avatar.png'}">
                                         </a>
                                     </div>
-                                    <input type="text" hidden="hidden" th:id="avatarUrl1">
+                                    <input type="text" hidden="hidden" th:id="avatarUrl1" th:value="${userDataDto.avatarUrl}">
                                     <label for="file1" class="sr-only control-label col-sm-2">请选择合法的头像</label>
                                     <input type="file" id="file1" name="fileName1">
                                     <div class="media-body">
@@ -70,16 +70,13 @@
                                     <label for="dataName" class="col-sm-2 control-label">性别</label>
                                     <div class="col-sm-10">
                                         <label class="radio-inline">
-                                            <input type="radio" name="sexOptions" id="inlineRadio1"
-                                                   value="1" th:field="${userDataDto.userData.sex}"> 男
+                                            <input type="radio"  id="inlineRadio1" value="1" th:field="${userDataDto.sex}"> 男
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="sexOptions" id="inlineRadio2"
-                                                   value="2" th:field="${userDataDto.userData.sex}"> 女
+                                            <input type="radio"  id="inlineRadio2" value="2" th:field="${userDataDto.sex}"> 女
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="sexOptions" id="inlineRadio3"
-                                                   value="3" th:field="${userDataDto.userData.sex}"> 保密
+                                            <input type="radio"  id="inlineRadio3" value="3" th:field="${userDataDto.sex}"> 保密
                                         </label>
                                     </div>
                                 </div>
@@ -87,7 +84,7 @@
                                     <label for="dataName" class="col-sm-2 control-label">个性签名</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="bio" placeholder="个签"
-                                               style="width: 20%" th:value="${userDataDto.userData.userBio}">
+                                               style="width: 20%" th:value="${userDataDto.userBio}">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -98,58 +95,64 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="profile">
-                        <div class="pull-left" style="margin-top: 40px"><h2>账号绑定</h2>
+                        <div class="pull-left" style="margin-top: 40px">
+                            <h2>账号绑定</h2>
+                            <h4>修改绑定邮箱</h4>
+                            <div th:id="now-div">
                             <form style="margin-top: 40px" class="form-group form-horizontal">
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">当前邮箱</label>
                                     <div class="col-sm-10">
-                                        <p class="form-control-static" th:text="${userDataDto.user.email}"></p>
+                                        <p th:id="old-email" class="form-control-static" th:text="${userDataDto.email}"></p>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="dataName" class="col-sm-2 control-label">验证码</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" placeholder="验证码" style="width: 20%">
+                                        <input type="text" th:id="old-email-verify" class="form-control" placeholder="验证码" style="width: 20%">
                                     </div>
                                     <label for="dataName" class="col-sm-2 control-label"></label>
                                     <span class="col-sm-10">
-                                    <input  type="button" name="sm1" value="获取验证码" onclick="setEmail(this)"/>
+                                    <input  type="button" name="sm2" value="获取验证码" onclick="setEmail(this)"/>
                                     </span>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-default btn-success pull-right" type="button" onclick="">验证
+                                    <button class="btn btn-default btn-success pull-right" name="old-email" type="button" onclick="verifyCode(this)">验证
                                     </button>
                                     <div class="media-body">
                                     </div>
                                 </div>
                             </form>
-                            <hr>
+                            </div>
+                            <div th:id="success-div" style="display: none">
+
                             <form style="margin-top: 40px" class="form-group form-horizontal">
                                 <h3>验证成功</h3>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">新邮箱</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control"  placeholder="Email" style="width: 20%">
+                                        <input th:id="new-email" type="text" class="form-control"  placeholder="Email" style="width: 20%">
                                     </div>
-                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="dataName" class="col-sm-2 control-label">验证码</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" placeholder="验证码" style="width: 20%">
+                                        <input type="text" th:id="new-email-verify" class="form-control" placeholder="验证码" style="width: 20%">
                                     </div>
                                     <label for="dataName" class="col-sm-2 control-label"></label>
                                     <span class="col-sm-10">
-                                        <input  type="button" name="sm1" value="获取验证码" onclick="setEmail(this)"/>
+                                        <input  type="button" name="sm3" value="获取验证码" onclick="setEmail(this)"/>
                                     </span>
                                     </div>
                                 <div class="form-group">
-                                    <button class="btn btn-default btn-success pull-right" type="button" onclick="">验证
+                                    <button class="btn btn-default btn-success pull-right" name="new-email" type="button" onclick="verifyCode(this)">验证
                                     </button>
                                     <div class="media-body">
                                     </div>
                                 </div>
                             </form>
+                            </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="security">
@@ -160,26 +163,26 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">旧密码</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control"  placeholder="Password" style="width: 20%">
+                                        <input type="password" th:id="old-password" class="form-control"  placeholder="Password" style="width: 20%">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">新密码</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control"  placeholder="Password" style="width: 20%">
+                                        <input type="password" th:id="new-password1" class="form-control"  placeholder="Password" style="width: 20%">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">确认密码</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control"  placeholder="Password" style="width: 20%">
+                                        <input type="password" th:id="new-password2" class="form-control"  placeholder="Password" style="width: 20%">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <button class="btn btn-default btn-success pull-right" type="button" onclick="">保存
+                                    <button class="btn btn-default btn-success pull-right" type="button" onclick="updatePassword()">保存
                                     </button>
                                     <div class="media-body">
                                     </div>

@@ -35,6 +35,9 @@ public class QuestionService {
     @Autowired
     private UserDataMapper userDataMapper;
 
+    @Autowired
+    private RedisService redisService;
+
     public PaginationDto List(String search, Integer page, Integer size,String type) {
         if (!(StringUtils.isNullOrEmpty(search))) {
             String[] searchs = search.split(" ");
@@ -64,7 +67,6 @@ public class QuestionService {
 
 
             List<Question> questions = questionMapper.List(offset, size, search);
-
             if("2".equals(type)){
                 Collections.sort(questions, new Comparator<Question>() {
                     @Override
@@ -85,6 +87,12 @@ public class QuestionService {
             List<QuestionDto> questionDtoList = new ArrayList<>();
 
             for (Question question : questions) {
+                int viewForRedis = redisService.getViewForRedis(question.getId());
+                if (viewForRedis==0){
+                    redisService.saveViewForRedis(question.getId(),question.getViewCount());
+                }else {
+                    question.setViewCount(viewForRedis);
+                }
                 User user = userMapper.findById(question.getCreator());
                 QuestionDto questionDto = new QuestionDto();
                 BeanUtils.copyProperties(question, questionDto);
@@ -125,6 +133,12 @@ public class QuestionService {
             List<QuestionDto> questionDtoList = new ArrayList<>();
 
             for (Question question : questions) {
+                int viewForRedis = redisService.getViewForRedis(question.getId());
+                if (viewForRedis==0){
+                    redisService.saveViewForRedis(question.getId(),question.getViewCount());
+                }else {
+                    question.setViewCount(viewForRedis);
+                }
                 User user = userMapper.findById(question.getCreator());
                 QuestionDto questionDto = new QuestionDto();
                 BeanUtils.copyProperties(question, questionDto);
@@ -143,6 +157,12 @@ public class QuestionService {
         Question question = questionMapper.getById(id);
         if (question == null) {
             throw new CustomizeException("问题不存在");
+        }
+        int viewForRedis = redisService.getViewForRedis(question.getId());
+        if (viewForRedis==0){
+            redisService.saveViewForRedis(question.getId(),question.getViewCount());
+        }else {
+            question.setViewCount(viewForRedis);
         }
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question, questionDto);
@@ -188,7 +208,8 @@ public class QuestionService {
     }
 
     public void incView(Integer id) {
-        questionMapper.updateView(id);
+//        questionMapper.updateView(id);
+        redisService.incViewForRedis(id);
     }
 
     public List<QuestionDto> selectQuestions(QuestionDto questionDto) {
@@ -293,12 +314,17 @@ public class QuestionService {
             List<QuestionDto> questionDtoList = new ArrayList<>();
 
             for (Question question : questions) {
+                int viewForRedis = redisService.getViewForRedis(question.getId());
+                if (viewForRedis==0){
+                    redisService.saveViewForRedis(question.getId(),question.getViewCount());
+                }else {
+                    question.setViewCount(viewForRedis);
+                }
                 User user = userMapper.findById(question.getCreator());
                 QuestionDto questionDto = new QuestionDto();
                 BeanUtils.copyProperties(question, questionDto);
                 questionDto.setUser(user);
                 questionDtoList.add(questionDto);
-
             }
             paginationDto.setData(questionDtoList);
 

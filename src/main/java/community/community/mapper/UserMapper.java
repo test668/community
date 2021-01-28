@@ -40,4 +40,13 @@ public interface UserMapper {
 
     @Insert("Insert into user (name,email,password,token,gmt_create,gmt_modified,avatar_url,type) values(#{name},#{email},md5(#{password}),#{token},#{gmtCreate},#{gmtModified},#{avatarUrl},#{type})")
     void insertLocalUser(User userRegister);
+
+    @Update("update user set avatar_url=#{avatarUrl},name=#{name} where id=#{id}")
+    void updateAvatarUrlAndName(User user);
+
+    @Select("Select count(1) from user where email=#{email} and type=#{type}")
+    int verifyEmail(User user);
+
+    @Update("update user set email=#{email} where id=#{id}")
+    void updateEmail(User user);
 }

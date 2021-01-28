@@ -220,9 +220,9 @@ function selectTag(value) {
         }
     }
 }
-function showSelectTag() {
-    $("#select-tag").show();
-}
+// function showSelectTag() {
+//     $("#select-tag").show();
+// }
 
 function deleteComment(e) {
     var commentId=e.getAttribute("comment-id");
@@ -407,6 +407,10 @@ function setEmail(obj) {
 var email=$("#email1").val();
 if (obj.getAttribute("name") == "sm1") {
     email=$("#email2").val();
+}else if (obj.getAttribute("name")=="sm2") {
+    email=$("#old-email").text();
+} else if (obj.getAttribute("name")=="sm3") {
+    email=$("#new-email").val();
 }
 if (!email){
     alert("请输入邮箱");
@@ -764,15 +768,27 @@ $(document).ready(function(e) {
                 }
             }
         });
-        alert("change事件触发");
+        // alert("change事件触发");
     });
 });
 
 function saveUserData(){
     var name=$("#dataName").val();
     var avatarUrl=$("#avatarUrl1").val();
-    var sex=$("input[name='sexOptions']:checked").val();
+    var sex = $("input[name='sex']:checked").val();
     var userBio=$("#bio").val();
+    if (!userBio) {
+        userBio="";
+    }
+    if (name.length<6||name.length>18){
+        alert("用户名长度不合法，请控制在6-18个字符以内");
+        return false;
+    }
+    if (userBio.length>30){
+        alert("个性签名不能超过30个字符");
+        return false;
+    }
+
     $.ajax({
         type: "POST",
         url: "/profileSetting/data",
@@ -785,8 +801,101 @@ function saveUserData(){
         }),
         success: function (response) {
             if (response.code == 200) {
-                window.location.reload();
+                alert("保存成功，请刷新页面");
             } else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+
+function verifyCode(e) {
+    var verifyCode=$("#old-email-verify").val();
+    var email=$("#old-email").text();
+    var successDiv=$("#success-div");
+    var nowDiv=$("#now-div");
+    var newOrOld=1;
+    if (e.getAttribute("name")=="new-email"){
+        email=$("#new-email").val();
+        verifyCode=$("#new-email-verify").val();
+        newOrOld=2;
+    }
+    if (!verifyCode) {
+        alert("请输入验证码");
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/profileSetting/verifyOld",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email":email,
+            "verifyCode":verifyCode
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                successDiv.show();
+                nowDiv.hide();
+                if (newOrOld==2){
+                    updateEmail();
+                }
+            }else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+
+}
+
+function updateEmail() {
+    var email=$("#new-email").val();
+    $.ajax({
+        type: "POST",
+        url: "/profileSetting/updateEmail",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email":email
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+                alert("修改成功，下次请使用该邮箱登录");
+            }else {
+                alert(response.message);
+            }
+            console.log(response);
+        },
+        dataType: "json"
+    });
+}
+
+function updatePassword() {
+    var oldPassword=$("#old-password").val();
+    var newPassword1=$("#new-password1").val();
+    var newPassword2=$("#new-password2").val();
+    if (newPassword1 != newPassword2) {
+        alert("请输入一致的新密码");
+        return;
+    }
+    if(newPassword1.length<6||newPassword1>18){
+        alert("请输入6-18位字符的密码");
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/profileSetting/updatePassword",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "oldPassword":oldPassword,
+            "newPassword":newPassword1
+        }),
+        success: function (response) {
+            if (response.code == 200) {
+               alert("修改成功，下次请使用此密码登录");
+            }else {
                 alert(response.message);
             }
             console.log(response);
