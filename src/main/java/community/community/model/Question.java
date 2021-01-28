@@ -2,8 +2,10 @@ package community.community.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Question {
+public class Question implements Serializable {
     private Integer id;
     private String title;
     private String description;

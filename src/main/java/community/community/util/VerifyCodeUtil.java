@@ -72,7 +72,7 @@ public class VerifyCodeUtil {
         try {
             mimeMessage = mailSender.createMimeMessage();
             helper= new MimeMessageHelper(mimeMessage, true);
-            helper.setSubject("注册账号验证码");
+            helper.setSubject("账号验证码");
             //后面的ture为支持识别html标签
             helper.setText("<h3>\n" +
                     "\t<span style=\"font-size:16px;\">亲爱的用户：</span> \n" +

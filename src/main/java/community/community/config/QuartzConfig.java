@@ -25,8 +25,8 @@ public class QuartzConfig {
     @Bean
     public Trigger saveViewCountTrigger(){
         SimpleScheduleBuilder simpleScheduleBuilder=SimpleScheduleBuilder.simpleSchedule()
-//                .withIntervalInHours(2)
-                .withIntervalInSeconds(60*2)
+                .withIntervalInHours(2)
+//                .withIntervalInSeconds(60*2)
                 .repeatForever();
         return TriggerBuilder.newTrigger().forJob(saveViewCountDetail())
                 .withIdentity(VIEW_COUNT)

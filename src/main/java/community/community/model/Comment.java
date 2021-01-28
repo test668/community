@@ -2,9 +2,11 @@ package community.community.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 
 @Data
-public class Comment {
+public class Comment implements Serializable {
     private Integer id;
     private long parentId;
     private long parentId2;

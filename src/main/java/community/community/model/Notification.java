@@ -2,8 +2,10 @@ package community.community.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Notification {
+public class Notification implements Serializable {
     private Integer id;
     private Long notifier;
     private Long receiver;
