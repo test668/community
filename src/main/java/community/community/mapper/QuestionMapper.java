@@ -2,6 +2,7 @@ package community.community.mapper;
 
 import community.community.model.Question;
 import community.community.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -53,4 +54,5 @@ public interface QuestionMapper {
 
     @Update("update question set like_count=#{likeCount} where id=#{id} and status=0")
     void updateLikeCount(Question question);
+
 }

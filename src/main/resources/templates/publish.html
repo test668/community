@@ -26,9 +26,9 @@
             <form action="/publish" method="post">
                 <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
-                    <label for="title">问题标题</label>
+                    <label for="title">标题</label>
                     <input type="text" class="form-control" id="title" th:value="${title}" name="title"
-                           placeholder="问题标题..." autocomplete="off">
+                           placeholder="标题...（不超过25个字）" autocomplete="off">
                 </div>
                 <div class="form-group" id="question-editor">
                     <label for="description">问题补充</label>
@@ -43,7 +43,7 @@
                             path   : "/js/lib/",
                             delay  : 0,
                             watch  :false,
-                            placeholder:"补充问题",
+                            placeholder:"具体内容（具体描述你的问题，可以添加具体的图片,代码,链接等）",
                             imageUpload    : true,
                             imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                             imageUploadURL : "./file/upload"
@@ -53,7 +53,7 @@
                 <div class="form-group">
                     <label for="tag">添加标签</label>
                     <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
-                           placeholder="输入标签,以逗号隔开" autocomplete="off" >
+                           placeholder="输入标签,以逗号隔开（每个标签不超过十个字，理论上不超过5个标签）" autocomplete="off" >
 <!--                    <div id="select-tag" class="publish-tag-tab">-->
 <!--                        <ul class="nav nav-tabs" role="tablist">-->
 <!--                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"-->

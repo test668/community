@@ -23,6 +23,8 @@ public class RedisService {
 
     private static String MAP_QUESTION_VIEW="MAP_QUESTION_VIEW";
 
+    private static String HOT_QUESTION="HOT_QUESTION";
+
     public void saveViewForRedis(int id,int viewCount){
         redisTemplate.opsForHash().put(MAP_QUESTION_VIEW,id,viewCount);
     }
@@ -48,6 +50,22 @@ public class RedisService {
             int id=(int)map.getKey();
             hashMap.put(id,(int)map.getValue());
             redisTemplate.opsForHash().delete(MAP_QUESTION_VIEW,id);
+        }
+        return hashMap;
+    }
+
+    public void saveHotQuestion(int id,String title){
+        redisTemplate.opsForHash().put(HOT_QUESTION,id,title);
+    }
+
+    public HashMap<Integer,String> getAllHotQuestion(){
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(HOT_QUESTION, ScanOptions.NONE);
+        HashMap<Integer,String> hashMap=new HashMap<>();
+        while (cursor.hasNext()){
+            Map.Entry<Object,Object> map=cursor.next();
+            int id=(int)map.getKey();
+            hashMap.put(id,(String)map.getValue());
+            redisTemplate.opsForHash().delete(HOT_QUESTION,id);
         }
         return hashMap;
     }
