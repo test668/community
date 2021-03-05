@@ -34,27 +34,27 @@ public class QuestionController {
             @PathVariable(name = "id") Integer id,
             Model model,
             HttpServletRequest request
-    ){
+    ) {
         User user = (User) request.getSession().getAttribute("user");
-        QuestionDto questionDto=questionService.getById(id,user);
-        List<QuestionDto> relateQuestions=questionService.selectQuestions(questionDto);
-        List<QuestionDto> latestQuestions=questionService.selectLeastQuestions(questionDto);
-        List<CommentDto> comments=commentService.listByTargetId(user,id, CommentTypeEnum.QUESTION);
+        QuestionDto questionDto = questionService.getById(id, user);
+        List<QuestionDto> relateQuestions = questionService.selectQuestions(questionDto);
+        List<QuestionDto> latestQuestions = questionService.selectLeastQuestions(questionDto);
+        List<CommentDto> comments = commentService.listByTargetId(user, id, CommentTypeEnum.QUESTION);
         questionService.incView(id);
-        model.addAttribute("question",questionDto);
-        model.addAttribute("comments",comments);
-        model.addAttribute("relateQuestions",relateQuestions);
-        model.addAttribute("latestQuestions",latestQuestions);
+        model.addAttribute("question", questionDto);
+        model.addAttribute("comments", comments);
+        model.addAttribute("relateQuestions", relateQuestions);
+        model.addAttribute("latestQuestions", latestQuestions);
         return "question";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/question/delete",method = RequestMethod.POST)
-    public ResultDto delete(@RequestBody Question question){
+    @RequestMapping(value = "/question/delete", method = RequestMethod.POST)
+    public ResultDto delete(@RequestBody Question question) {
         try {
             question.setStatus(1);
             questionService.deleteQuestion(question);
-            return ResultDto.error0f(200,"删除成功");
+            return ResultDto.error0f(200, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultDto.error0f(2003, "执行异常");
@@ -62,8 +62,8 @@ public class QuestionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/question/collectQuestion",method = RequestMethod.POST)
-    public ResultDto collectQuestion(@RequestBody QuestionDto questionDto,HttpServletRequest request){
+    @RequestMapping(value = "/question/collectQuestion", method = RequestMethod.POST)
+    public ResultDto collectQuestion(@RequestBody QuestionDto questionDto, HttpServletRequest request) {
         try {
             User user = (User) request.getSession().getAttribute("user");
             if (user == null) {
@@ -71,7 +71,7 @@ public class QuestionController {
             }
             questionDto.setUser(user);
             questionService.collectQuestion(questionDto);
-            return ResultDto.error0f(200,"收藏成功");
+            return ResultDto.error0f(200, "收藏成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultDto.error0f(2003, "执行异常");
@@ -79,8 +79,8 @@ public class QuestionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/question/likeQuestion",method = RequestMethod.POST)
-    public ResultDto likeQuestion(@RequestBody QuestionDto questionDto,HttpServletRequest request){
+    @RequestMapping(value = "/question/likeQuestion", method = RequestMethod.POST)
+    public ResultDto likeQuestion(@RequestBody QuestionDto questionDto, HttpServletRequest request) {
         try {
             User user = (User) request.getSession().getAttribute("user");
             if (user == null) {
@@ -88,7 +88,7 @@ public class QuestionController {
             }
             questionDto.setUser(user);
             questionService.likeQuestion(questionDto);
-            return ResultDto.error0f(200,"点赞成功");
+            return ResultDto.error0f(200, "点赞成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultDto.error0f(2003, "执行异常");

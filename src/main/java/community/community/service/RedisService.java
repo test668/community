@@ -1,5 +1,7 @@
 package community.community.service;
 
+import community.community.mapper.QuestionMapper;
+import community.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,6 +22,9 @@ public class RedisService {
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    QuestionMapper questionMapper;
 
     private static String MAP_QUESTION_VIEW="MAP_QUESTION_VIEW";
 
@@ -54,19 +59,29 @@ public class RedisService {
         return hashMap;
     }
 
-    public void saveHotQuestion(int id,String title){
-        redisTemplate.opsForHash().put(HOT_QUESTION,id,title);
+    public void saveHotQuestion(List<Question> questionList){
+        questionList.forEach(question -> {
+            redisTemplate.opsForList().rightPush(HOT_QUESTION,question.getId());
+        });
     }
 
-    public HashMap<Integer,String> getAllHotQuestion(){
-        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(HOT_QUESTION, ScanOptions.NONE);
-        HashMap<Integer,String> hashMap=new HashMap<>();
-        while (cursor.hasNext()){
-            Map.Entry<Object,Object> map=cursor.next();
-            int id=(int)map.getKey();
-            hashMap.put(id,(String)map.getValue());
-            redisTemplate.opsForHash().delete(HOT_QUESTION,id);
+    public void deleteAllHotQuestion(){
+        redisTemplate.opsForList().rightPop(HOT_QUESTION);
+    }
+
+    public List<Question> getAllHotQuestion(){
+        List<Question> resultList=new ArrayList<>();
+        long size=redisTemplate.opsForList().size(HOT_QUESTION);
+        List<Integer> questionIds;
+        if(size>5){
+            questionIds = redisTemplate.opsForList().range(HOT_QUESTION, 0, 4);
+        }else {
+            questionIds=redisTemplate.opsForList().range(HOT_QUESTION,0,size-1);
         }
-        return hashMap;
+        questionIds.forEach(questionId->{
+            Question question=questionMapper.getById(questionId);
+            resultList.add(question);
+        });
+        return resultList;
     }
 }

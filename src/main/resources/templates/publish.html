@@ -20,9 +20,8 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+            <h2><span  aria-hidden="true"></span>发帖</h2>
             <hr>
-
             <form action="/publish" method="post">
                 <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
@@ -36,52 +35,52 @@
                               cols="30" rows="10" style="display: none;"></textarea>
                 </div>
                 <script type="text/javascript">
-                    $(function() {
+                    $(function () {
                         var editor = editormd("question-editor", {
-                            width  : "100%",
-                            height : 300,
-                            path   : "/js/lib/",
-                            delay  : 0,
-                            watch  :false,
-                            placeholder:"具体内容（具体描述你的问题，可以添加具体的图片,代码,链接等）",
-                            imageUpload    : true,
-                            imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                            imageUploadURL : "./file/upload"
+                            width: "100%",
+                            height: 300,
+                            path: "/js/lib/",
+                            delay: 0,
+                            watch: false,
+                            placeholder: "文章的主要内容，可以添加图片，代码等",
+                            imageUpload: true,
+                            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                            imageUploadURL: "./file/upload"
                         });
                     });
                 </script>
                 <div class="form-group">
                     <label for="tag">添加标签</label>
                     <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
-                           placeholder="输入标签,以逗号隔开（每个标签不超过十个字，理论上不超过5个标签）" autocomplete="off" >
-<!--                    <div id="select-tag" class="publish-tag-tab">-->
-<!--                        <ul class="nav nav-tabs" role="tablist">-->
-<!--                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"-->
-<!--                                                                      data-toggle="tab">开发语言</a></li>-->
-<!--                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"-->
-<!--                                                       data-toggle="tab">相关框架</a></li>-->
-<!--                        </ul>-->
-<!--                        <div class="tab-content">-->
-<!--                            <div role="tabpanel" class="tab-pane active" id="home">-->
-<!--                                <span class="label label-info ">-->
-<!--                            <span class="glyphicon glyphicon-tags" onclick="selectTag('java')">java</span>-->
-<!--                                 </span>-->
-<!--                            </div>-->
-<!--                            <div role="tabpanel" class="tab-pane" id="profile">-->
-<!--                                <span class="label label-info ">-->
-<!--                            <span class="glyphicon glyphicon-tags" onclick="selectTag('spring')">spring</span>-->
-<!--                                </span>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                           placeholder="输入标签,以逗号隔开（每个标签不超过十个字，理论上不超过5个标签）" autocomplete="off">
+                    <!--                    <div id="select-tag" class="publish-tag-tab">-->
+                    <!--                        <ul class="nav nav-tabs" role="tablist">-->
+                    <!--                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"-->
+                    <!--                                                                      data-toggle="tab">开发语言</a></li>-->
+                    <!--                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab"-->
+                    <!--                                                       data-toggle="tab">相关框架</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                        <div class="tab-content">-->
+                    <!--                            <div role="tabpanel" class="tab-pane active" id="home">-->
+                    <!--                                <span class="label label-info ">-->
+                    <!--                            <span class="glyphicon glyphicon-tags" onclick="selectTag('java')">java</span>-->
+                    <!--                                 </span>-->
+                    <!--                            </div>-->
+                    <!--                            <div role="tabpanel" class="tab-pane" id="profile">-->
+                    <!--                                <span class="label label-info ">-->
+                    <!--                            <span class="glyphicon glyphicon-tags" onclick="selectTag('spring')">spring</span>-->
+                    <!--                                </span>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
 
-<!--                    </div>-->
+                    <!--                    </div>-->
                 </div>
-<!--                <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">-->
-<!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-<!--                    <strong><span  th:text="${error}" th:if="${error!=null}"></span></strong>-->
-<!--                </div>-->
+                <!--                <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">-->
+                <!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--                    <strong><span  th:text="${error}" th:if="${error!=null}"></span></strong>-->
+                <!--                </div>-->
                 <div th:if="${error!=null}">
-                    <span class="iconfont icon-tishijinggaokuang" th:text="${error}" ></span>
+                    <span class="iconfont icon-tishijinggaokuang" th:text="${error}"></span>
                 </div>
                 <button type="submit" class="btn btn-success btn-publish">发帖</button>
             </form>
@@ -89,10 +88,50 @@
         </div>
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>问题发起指南</h3>
-            1.问题标题：请使用合适的内容概括你要发布的问题，不超过25个字<br>
-            2.具体描述：请补充你的问题内容，可以提供一些相关的资料，图片等<br>
-            3.添加标签：请添加一个或多个适当的标签，并使用逗号将其隔开，每个标签不超过10个字<br>
+            <h3>热门标签</h3>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags">Java</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">JavaScript</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">SpringBoot</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Spring</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">CSS</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Thymeleaf</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Dubbo</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Zookeeper</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Python</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Redis</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Mysql</span></span>
+                    <span class="label label-info tag-publish"><span class="glyphicon glyphicon-tags ">Oracle</span></span>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <h3>论坛行为规范</h3>
+                <div class="tab-content">
+                    <h5>用户拥有发布信息的权利，但不得发布含有以下内容的信息：<br>
+
+                        (一) 反对宪法确定的基本原则的；<br>
+
+                        (二) 危害国家统一、主权和领土完整的；<br>
+
+                        (三) 泄露国家秘密、危害国家安全或者损害国家荣誉和利益的；<br>
+
+                        (四) 煽动民族仇恨、民族歧视，破坏民族团结，或者侵害民族风俗、习惯的；<br>
+
+                        (五) 破坏国家宗教政策，宣扬邪教、迷信的；<br>
+
+                        (六) 散布谣言，扰乱社会秩序，破坏社会稳定的；<br>
+
+                        (七) 宣扬淫秽、赌博、暴力、色情、凶杀、恐怖或者教唆犯罪的；<br>
+
+                        (八) 煽动非法集会、结社、游行、示威、聚众扰乱社会秩序的；<br>
+
+                        (九) 有法律、行政法规和国家规定禁止的其他内容的。<br>
+                    如有违反上述规定的将进行封号处理！
+                    </h5>
+                </div>
+            </div>
         </div>
     </div>
 </div>

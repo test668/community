@@ -46,7 +46,7 @@ public interface QuestionMapper {
     @Update("update question set comment_count=comment_count-1 where id=#{id}")
     void decCommentCount(Question question);
 
-    @Select("select id,title,tag from question where  creator=#{id} and status=0 limit 5")
+    @Select("select id,title,tag from question where  creator=#{id} and status=0 order by gmt_create desc limit 5 ")
     List<Question> findLeastQuestion(User user);
 
     @Update("update question set collect_count=#{collectCount} where id=#{id} and status=0")
