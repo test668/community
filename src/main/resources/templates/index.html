@@ -84,7 +84,14 @@
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>热门话题</h3>
-        </div>
+            <div class="media" th:each="hotQuestion : ${hotQuestions}">
+                <span style="font-size: 18px" th:if="${hotQuestion.rank!=0&&hotQuestion.rank!=1&&hotQuestion.rank!=2}" th:text="${hotQuestion.rank+1}+'.'"></span>
+                <span class="iconfont icon-first" style="font-size: 22px!important;" th:if="${hotQuestion.rank==0}"></span>
+                <span class="iconfont icon-second" style="font-size: 22px!important;" th:if="${hotQuestion.rank==1}"></span>
+                <span class="iconfont icon-third" style="font-size: 22px!important;" th:if="${hotQuestion.rank==2}"></span>
+                <a th:href="@{'/question/'+${hotQuestion.question.id}}" th:text="${hotQuestion.question.title}"></a>
+            </div>
+            </div>
     </div>
 </div>
 

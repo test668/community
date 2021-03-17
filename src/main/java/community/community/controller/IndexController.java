@@ -41,7 +41,13 @@ public class IndexController {
             allHotQuestion=hotQuestionUtil.getHotQuestion();
             redisService.saveHotQuestion(allHotQuestion);
         }
-        HotQuestionDto hotQuestionDto=new HotQuestionDto();
+        List<HotQuestionDto> hotQuestionDtoList=new ArrayList<>();
+        for (int i=0; i<allHotQuestion.size();i++){
+            HotQuestionDto hotQuestionDto=new HotQuestionDto();
+            hotQuestionDto.setQuestion(allHotQuestion.get(i));
+            hotQuestionDto.setRank(i);
+            hotQuestionDtoList.add(hotQuestionDto);
+        }
 
         if (pagination == null) {
             //以后修改
@@ -49,7 +55,7 @@ public class IndexController {
             model.addAttribute("pagination", pagination);
             model.addAttribute("search", search);
             model.addAttribute("type",type);
-//            model.addAttribute("hotQuestion",allHotQuestion);
+            model.addAttribute("hotQuestions",hotQuestionDtoList);
         }
         return "index";
     }

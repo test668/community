@@ -1,8 +1,6 @@
 package community.community.util;
 
 import community.community.dto.ResultDto;
-import community.community.mapper.UserMapper;
-import community.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
